@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { Navbar, Footer, Welcome, Services, Transactions, Loader } from "./components"
 
 const App = () => {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-          <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-    </div>
+   <div className="min-h-screen">
+     <div className="gradient-bg-welcome">
+       <Navbar/>
+       <Welcome/>
+     </div>
+     <Services/>
+     <Footer/>
+   </div>
   )
 }
 
