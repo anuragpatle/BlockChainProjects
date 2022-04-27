@@ -23,11 +23,13 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 const Welcome = () => {
   //   const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
-  const { currentAccount, connectWallet } = useContext(TransactionContext);
+  const { currentAccount, connectWallet, handleChange, sendTransaction, formData } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
     const { addressTo, amount, keyword, message } = formData;
 
+    // Usually when you submit a form, the page reloads.
+    // preventDefault() prevents this.
     e.preventDefault();
 
     if (!addressTo || !amount || !keyword || !message) return;
@@ -97,14 +99,11 @@ const Welcome = () => {
             </div>
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-            <Input placeholder="Address To" name="addressTo" type="text" />
-            <Input placeholder="Amount (ETH)" name="amount" type="number" />
-            <Input placeholder="Keyword (Gif)" name="keyword" type="text" />
-            <Input placeholder="Enter Message" name="message" type="text" />
-            {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
+
+            <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
             <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
             <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
-            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} /> */}
+            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
 
             <div className="h-[1px] w-full bg-gray-400 my-2" />
 

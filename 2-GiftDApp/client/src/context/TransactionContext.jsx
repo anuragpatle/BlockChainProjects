@@ -13,17 +13,34 @@ const { ethereum } = window;
 const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
-  const TransactionContract = new ethers.Contract(
+  const transactionContract = new ethers.Contract(
     contractAddress,
     contractABI,
     signer
   );
 
-  console.log({ provider, signer, TransactionContract });
+  console.log({ provider, signer, transactionContract });
+
+  return transactionContract;
 };
 
 export const TransactionProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
+  const [formData, setformData] = useState({
+    addressTo: "",
+    amount: "",
+    keyword: "",
+    message: "",
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount')); // saving transaction count in local storage
+
+
+  const handleChange = (e, name) => {
+    setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  };
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -56,7 +73,7 @@ export const TransactionProvider = ({ children }) => {
 
       console.log("eth_requestAccounts: ", accounts);
       setCurrentAccount(accounts[0]);
-    //   window.location.reload();
+      //   window.location.reload();
     } catch (error) {
       console.log(error);
 
@@ -64,17 +81,71 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
-  // By using this Hook, you tell React that your component needs to do something after render.
-  // React will remember the function you passed (we’ll refer to it as our “effect”), and call
-  // it later after performing the DOM updates. In this effect, we set the document title,
-  // but we could also perform data fetching or call some other imperative API.
+  const sendTransaction = async () => {
+    try {
+      if (!ethereum) return alert("Please install metamask");
+
+      const { addressTo, amount, keyword, message } = formData;
+
+      const transactionContract = getEthereumContract(); // Now, use this variable to call all the contracts related functions (i.e. functions which are written in Transactions.sol file)
+
+	  const parseedAmount = ethers.utils.parseEther(amount); // parses into gwei number from decimal number
+	await ethereum.request({
+		method: 'eth_sendTransaction',
+		params: [
+			{
+				from: currentAccount,
+				to: addressTo,
+				gas: '0x5208', // = 21000 gwei, or 0.000021 ether
+				value: parseedAmount._hex
+			}
+		]
+	});
+
+	// After sending ether to the account, we have to add this transaction as a block in the blockchain
+	const transactionHash = await transactionContract.addToBlockchain(addressTo, parseedAmount, message, keyword);
+
+	setIsLoading(true);
+	console.log(`Loading - ${transactionHash.hash}`);
+
+	await transactionHash.wait(); // this will wait for the transaction to be finished.
+
+	setIsLoading(false);
+	console.log(`Success - ${transactionHash.hash}`);
+
+	const transactionCount = await transactionContract.getTransactionCount();
+
+	setTransactionCount(transactionCount.toNumber());
+
+    } catch (error) {
+      console.log(error);
+
+      throw new Error("No ethereum object.");
+    }
+  };
+
+  /**
+   * By using this Hook, you tell React that your component needs to do something after render.
+   * React will remember the function you passed (we’ll refer to it as our “effect”), and call
+   * it later after performing the DOM updates. In this effect, we set the document title,
+   * but we could also perform data fetching or call some other imperative API.
+   */
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
 
   return (
     //   Since the key and value i.e. connectWallet: connectWallet are same, we can pass just connectWallet
-    <TransactionContext.Provider value={{ connectWallet, currentAccount }}>
+    <TransactionContext.Provider
+      value={{
+        connectWallet,
+        currentAccount,
+        formData,
+        setformData,
+        handleChange,
+		sendTransaction
+      }}
+    >
       {children}
     </TransactionContext.Provider>
   );
