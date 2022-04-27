@@ -23,15 +23,27 @@ const getEthereumContract = () => {
 };
 
 export const TransactionProvider = ({ children }) => {
-  // const [connectedAccounts, setconnectedAccounts] = useState(initialState);
   const [currentAccount, setCurrentAccount] = useState("");
 
   const checkIfWalletIsConnected = async () => {
-    if (!ethereum) return alert("Please install metamask");
+    try {
+      if (!ethereum) return alert("Please install metamask");
 
-    const accounts = await ethereum.request({ method: "eth_accounts" });
+      const accounts = await ethereum.request({ method: "eth_accounts" });
 
-    console.log("##accounts: ", accounts);
+      if (accounts.length) {
+        setCurrentAccount(accounts[0]);
+
+        // getAllTransactions();
+      } else {
+        console.log("No account found.");
+      }
+
+      console.log("##Connected Accounts: ", accounts);
+    } catch (error) {
+      console.log(error);
+      throw new Error("No ethereum object");
+    }
   };
 
   const connectWallet = async () => {
@@ -42,9 +54,9 @@ export const TransactionProvider = ({ children }) => {
         method: "eth_requestAccounts",
       });
 
-	  console.log("eth_requestAccounts: ", accounts)
-    //   setCurrentAccount(accounts[0]);
-      window.location.reload();
+      console.log("eth_requestAccounts: ", accounts);
+      setCurrentAccount(accounts[0]);
+    //   window.location.reload();
     } catch (error) {
       console.log(error);
 
