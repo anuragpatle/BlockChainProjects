@@ -172,7 +172,7 @@ export const TransactionProvider = ({ children }) => {
       setTransactionCount(transactionCount.toNumber());
     } catch (error) {
       console.log(error);
-
+	  setIsLoading(false);
       throw new Error("No ethereum object.");
     }
   };
@@ -198,7 +198,8 @@ export const TransactionProvider = ({ children }) => {
         setformData,
         handleChange,
         sendTransaction,
-		transactions
+		transactions,
+		isLoading
       }}
     >
       {children}

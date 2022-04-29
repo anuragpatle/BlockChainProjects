@@ -44,7 +44,7 @@ const Welcome = () => {
             Ship Drugs <br /> with measures
           </h1>
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-          You can transport any drugs which need extensive care like maintaining a certain temperature while shipment
+            You can transport any drugs which need extensive care like maintaining a cretain temprature while shipment.
           </p>
           {!currentAccount && (
             <button
@@ -98,24 +98,10 @@ const Welcome = () => {
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
 
-            {/* <Input placeholder="Drug: Insulin" name="amount" type="text" />
             <Input placeholder="Address To: 0xB59e9Cf481060c06cA7BB317dE9383f89106A391"  name="addressTo" type="text" handleChange={handleChange} />
             <Input placeholder="Amount (ETH): 0.0005 ETH" name="amount" type="number" handleChange={handleChange} />
-            <Input placeholder="Temperature to be maintained in Degree C" name="amount" type="number" />
-            <Input placeholder="Quantity" name="amount" type="number" />
-            <Input placeholder="Where to ship address" name="keyword" type="text" handleChange={handleChange} />
-            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} /> */}
-
-            <input className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism" placeholder="Drug: Insulin" name="amount" type="text" />
-            <input className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism" placeholder="Temperature to be maintained in Degree C" name="amount" type="number" />
-            <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
-            <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
-            <Input placeholder="Keyword" name="keyword" type="text" handleChange={handleChange} />
-            <input className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism" placeholder="Quantity" name="quantity" type="number" />
-            <input className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism" placeholder="Where to ship address" name="ship" type="text"  />
+            <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
             <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
-
-
 
             <div className="h-[1px] w-full bg-gray-400 my-2" />
 
