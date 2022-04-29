@@ -4,7 +4,7 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 
 import { TransactionContext } from "../context/TransactionContext";
-// import { shortenAddress } from "../utils/shortenAddress";
+import { shortenAddress } from "../utils/shortenAddress";
 import { Loader } from ".";
 
 const companyCommonStyles =
@@ -22,8 +22,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 );
 
 const Welcome = () => {
-  //   const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
-  const { currentAccount, connectWallet, handleChange, sendTransaction, formData } = useContext(TransactionContext);
+  const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
     const { addressTo, amount, keyword, message } = formData;
@@ -42,11 +41,10 @@ const Welcome = () => {
       <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
         <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
           <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
-            Send Crypto <br /> across the world
+            Ship Drugs <br /> with measures
           </h1>
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-            Explore the crypto world. Buy and sell cryptocurrencies easily on
-            Krypto.
+          You can transport any drugs which need extensive care like maintaining a certain temperature while shipment
           </p>
           {!currentAccount && (
             <button
@@ -90,7 +88,7 @@ const Welcome = () => {
               </div>
               <div>
                 <p className="text-white font-light text-sm">
-                  {/* {shortenAddress(currentAccount)} */}
+                  {shortenAddress(currentAccount)}
                 </p>
                 <p className="text-white font-semibold text-lg mt-1">
                   Ethereum
@@ -100,14 +98,28 @@ const Welcome = () => {
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
 
+            {/* <Input placeholder="Drug: Insulin" name="amount" type="text" />
+            <Input placeholder="Address To: 0xB59e9Cf481060c06cA7BB317dE9383f89106A391"  name="addressTo" type="text" handleChange={handleChange} />
+            <Input placeholder="Amount (ETH): 0.0005 ETH" name="amount" type="number" handleChange={handleChange} />
+            <Input placeholder="Temperature to be maintained in Degree C" name="amount" type="number" />
+            <Input placeholder="Quantity" name="amount" type="number" />
+            <Input placeholder="Where to ship address" name="keyword" type="text" handleChange={handleChange} />
+            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} /> */}
+
+            <input className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism" placeholder="Drug: Insulin" name="amount" type="text" />
+            <input className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism" placeholder="Temperature to be maintained in Degree C" name="amount" type="number" />
             <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
             <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
-            <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
+            <Input placeholder="Keyword" name="keyword" type="text" handleChange={handleChange} />
+            <input className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism" placeholder="Quantity" name="quantity" type="number" />
+            <input className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism" placeholder="Where to ship address" name="ship" type="text"  />
             <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
+
+
 
             <div className="h-[1px] w-full bg-gray-400 my-2" />
 
-            {false ? (
+            {isLoading ? (
               <Loader />
             ) : (
               <button
@@ -115,7 +127,7 @@ const Welcome = () => {
                 onClick={handleSubmit}
                 className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
               >
-                Send now
+                Pay for Shipment
               </button>
             )}
           </div>
