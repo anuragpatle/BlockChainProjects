@@ -21,6 +21,16 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 );
 
+const SimpleInput = ({ placeholder, name, type, value }) => (
+  <input
+    placeholder={placeholder}
+    type={type}
+    step="1"
+    value={value}
+    className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+  />
+);
+
 const Welcome = () => {
   const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
 
@@ -98,10 +108,19 @@ const Welcome = () => {
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
 
-            <Input placeholder="Address To: 0xB59e9Cf481060c06cA7BB317dE9383f89106A391"  name="addressTo" type="text" handleChange={handleChange} />
+            {/* <Input placeholder="Address To"  name="addressTo" type="text" handleChange={handleChange} />
+            <Input placeholder="Amount (ETH): 0.0005 ETH" name="amount" type="number" handleChange={handleChange} />
+            <SimpleInput placeholder="Drug Name" name="dn" type="text"/>
+            <SimpleInput placeholder="Temprature Limit (degree C)" name="tl" type="text"/>
+            <SimpleInput placeholder="Quantity" name="Quantity" type="number"/>
+            <SimpleInput placeholder="Delivery Address" name="da" type="text"/> */}
+            {/* <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} /> */}
+
+            <Input placeholder="Address To: 0xB59e.."  name="addressTo" type="text" handleChange={handleChange} />
             <Input placeholder="Amount (ETH): 0.0005 ETH" name="amount" type="number" handleChange={handleChange} />
             <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
             <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
+
 
             <div className="h-[1px] w-full bg-gray-400 my-2" />
 

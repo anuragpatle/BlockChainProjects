@@ -130,6 +130,10 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  const pendingTxn = () => {
+    return new Promise(resolve => setTimeout(resolve, 3000));
+  }
+
   const sendTransaction = async () => {
     try {
       if (!ethereum) return alert("Please install metamask");

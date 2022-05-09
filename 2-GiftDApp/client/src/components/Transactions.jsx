@@ -2,9 +2,36 @@ import React, { useContext } from "react";
 
 import { TransactionContext } from "../context/TransactionContext";
 
+import truck from '../../gifs/truck.gif';
+import deliveredBoxes from '../../images/box.jpg';
+
+
 // import useFetch from "../hooks/useFetch";
 import dummyData from "../utils/dummyData";
 import { shortenAddress } from "../utils/shortenAddress";
+
+const DeliveryStatus = ({timestamp}) => {
+
+  const tsNow =  Math.floor(new Date().getTime() / 1000);
+  const ts =  Math.floor(new Date(timestamp).getTime() / 1000);
+
+  {console.log("timestamp- ts: ",  ts)};
+  {console.log("timestamp- ts now: ",  tsNow)}
+
+  const diff = tsNow - ts;
+  {console.log("timestamp- ts diff: ",  diff)}
+
+
+
+  return (
+    <img
+    src={diff > 300 ? deliveredBoxes: truck }
+    alt="nature"
+    className="w-full h-16 2xl:h-32 rounded-md shadow-lg object-cover"
+  />
+  );
+}
+
 
 const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url }) => {
 //   const gifUrl = useFetch({ keyword });
@@ -34,11 +61,21 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
             </>
           )}
         </div>
-        {/* <img
-          src={gifUrl || url}
-          alt="nature"
-          className="w-full h-64 2xl:h-96 rounded-md shadow-lg object-cover"
-        /> */}
+        {console.log("timestamp: ", timestamp)}
+        {console.log("timestamp- date: ", new Date(timestamp))}
+
+
+
+
+        {console.log("timestamp- ts now diff : ",  (Math.floor(new Date().getTime() / 1000)) - Math.floor(new Date(timestamp).getTime() / 1000))}
+
+
+
+
+        {/* {const difD =  (Math.floor(new Date().getTime() / 1000)) - Math.floor(new Date(timestamp).getTime() / 1000))}
+        {console.log("timestamp- ts now diff days : ",  (difD) / (60 * 60 * 24) } */}
+        <DeliveryStatus timestamp={timestamp} />
+       {/* {true ? (timestamp ) : ()} */}
         <div className="bg-black p-3 px-5 w-max rounded-3xl -mt-5 shadow-2xl">
           <p className="text-[#37c7da] font-bold">{timestamp}</p>
         </div>

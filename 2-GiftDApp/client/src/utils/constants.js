@@ -2,7 +2,7 @@ import abi from '../../../smart_contract/artifacts/contracts/Transactions.sol/Tr
 
 
 // copied from npx hardhat run .\scripts\deploy.js  --network ropsten
-// Greeter deployed to: 0x4B3046CDa0902d362D97D31159c34C357Cf3851d
-export const contractAddress = '0x4B3046CDa0902d362D97D31159c34C357Cf3851d';
+// Greeter deployed to: 0x....
+export const contractAddress = '0x4d5BcAB1b83F1C7F96b9328e3e18E05360Dc4084';
 
 export const contractABI = abi.abi;
