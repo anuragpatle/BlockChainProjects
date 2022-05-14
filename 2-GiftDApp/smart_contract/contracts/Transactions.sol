@@ -62,20 +62,18 @@ contract Transactions {
         return address(iaddr);
     }
 
-    function makePayment() payable public  {
+    function makePayment(address payable _to) payable public  {
 
-        // address addrTo = parseAddr(addressStr);
 
-        // address payable payableTo = payable(0xB59e9Cf481060c06cA7BB317dE9383f89106A391);
 
-        // payableTo.transfer(500000000000000);
+        _to.transfer(0.0005 ether);
 
         // address adr = 0xB59e9Cf481060c06cA7BB317dE9383f89106A391;
 
     }
 
     function someFun() public {
-        (bool success,  ) = address(this).call{value: 0.0005 ether}(abi.encodeWithSignature("someOtherFunction(uint256)", 123));
+        (bool success,  ) = address(this).call{value: 0.0005 ether}(abi.encodeWithSignature("someOtherFunction(uint256)", 21000));
         require(success, "Contract execution Failed");
     }
 

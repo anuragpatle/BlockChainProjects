@@ -2,7 +2,7 @@
 
 1. To initialize the truffle setup.
 
-	BlockChainProjects/1-EThereumTruffleExample$ truffle -init
+	BlockChainProjects/1-EThereumTruffleExample$ truffle init
 
 2. To use Ganache local account.
 
@@ -40,7 +40,7 @@
 	Suppose 2_xxx file is dependent of 1_yyy file.
 
 
-<code>
+```
 $ truffle init
 
 $ npm i @truffle/hdwallet-provider
@@ -56,4 +56,5 @@ $ truffle develop
 $ truffle compile
 
 $ npm run start
-</code>
+
+```

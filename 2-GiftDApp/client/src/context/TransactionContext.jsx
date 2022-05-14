@@ -29,8 +29,9 @@ export const TransactionProvider = ({ children }) => {
   const [formData, setformData] = useState({
     addressTo: "",
     amount: "",
-    keyword: "",
-    message: "",
+    drugName: "",
+    temperature: "",
+    destAddress: ""
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +41,7 @@ export const TransactionProvider = ({ children }) => {
   ); // saving transaction count in local storage
 
   const [transactions, setTransactions] = useState([]);
+  const [dispatchOrders, setDispatchOrders] = useState([]);
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -134,6 +136,19 @@ export const TransactionProvider = ({ children }) => {
     return new Promise(resolve => setTimeout(resolve, 3000));
   }
 
+  // const dispatchOrders = [];
+  const orderForDispatch = () => {
+
+    const { addressTo, amount, destAddress, drugName, temperature } = formData;
+    let order = {"addressTo": addressTo, "amount": amount, "time": new Date(), "destAddress": destAddress, "drugName": drugName, "temperature": temperature};
+    dispatchOrders.push(order);
+    console.log("dispacthOrders: ", dispatchOrders);
+
+    setDispatchOrders(dispatchOrders);
+  }
+
+
+
   const sendTransaction = async () => {
     try {
       if (!ethereum) return alert("Please install metamask");
@@ -141,6 +156,11 @@ export const TransactionProvider = ({ children }) => {
       const { addressTo, amount, keyword, message } = formData;
 
       const transactionContract = getEthereumContract(); // Now, use this variable to call all the contracts related functions (i.e. functions which are written in Transactions.sol file)
+
+
+      await pendingTxn().then(() => console.log("hi"));
+
+      await transactionContract.makePayment(addressTo);
 
       const parseedAmount = ethers.utils.parseEther(amount); // parses into gwei number from decimal number
       await ethereum.request({
@@ -202,8 +222,11 @@ export const TransactionProvider = ({ children }) => {
         setformData,
         handleChange,
         sendTransaction,
-		transactions,
-		isLoading
+        setDispatchOrders,
+        dispatchOrders,
+        orderForDispatch,
+		    transactions,
+	    	isLoading
       }}
     >
       {children}

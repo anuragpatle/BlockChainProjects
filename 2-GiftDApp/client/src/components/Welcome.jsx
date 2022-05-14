@@ -32,18 +32,19 @@ const SimpleInput = ({ placeholder, name, type, value }) => (
 );
 
 const Welcome = () => {
-  const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
+  const { currentAccount, connectWallet, handleChange, sendTransaction, orderForDispatch, formData, isLoading } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
-    const { addressTo, amount, keyword, message } = formData;
+    const { addressTo, amount, drugName, temperature, destAddress } = formData;
 
     // Usually when you submit a form, the page reloads.
     // preventDefault() prevents this.
-    e.preventDefault();
+    // e.preventDefault();
 
-    if (!addressTo || !amount || !keyword || !message) return;
+    if (!addressTo || !amount || !drugName || !temperature || !destAddress) return;
 
-    sendTransaction();
+    // sendTransaction();
+    orderForDispatch();
   };
 
   return (
@@ -117,9 +118,10 @@ const Welcome = () => {
             {/* <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} /> */}
 
             <Input placeholder="Address To: 0xB59e.."  name="addressTo" type="text" handleChange={handleChange} />
-            <Input placeholder="Amount (ETH): 0.0005 ETH" name="amount" type="number" handleChange={handleChange} />
-            <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
-            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
+            <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
+            <Input placeholder="Name of the Drug" name="drugName" type="text" handleChange={handleChange} />
+            <Input placeholder="Temperature in d. C" name="temperature" type="text" handleChange={handleChange} />
+            <Input placeholder="Destination Address" name="destAddress" type="text" handleChange={handleChange} />
 
 
             <div className="h-[1px] w-full bg-gray-400 my-2" />
