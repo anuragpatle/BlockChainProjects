@@ -33,7 +33,7 @@ require('@openzeppelin/hardhat-upgrades');
 
 module.exports = {
   solidity: "0.8.0",
-  defaultNetwork: "ganache",
+  defaultNetwork: "ropsten",
   networks: {
     ropsten: {
       url: 'https://eth-ropsten.alchemyapi.io/v2/XniA4dRHHlKRaYEKCR9uPUQYuHSg7x3o',

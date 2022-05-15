@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 
 import { contractABI, contractAddress } from "../utils/constants";
 
-export const TransactionContext = React.createContext();
+
 
 // Get ethereum object from the metamask browser addon
 // Since we are using metamask wallet extention/addon on the browser, we have access to ethereum object.
@@ -41,7 +41,7 @@ export const TransactionProvider = ({ children }) => {
   ); // saving transaction count in local storage
 
   const [transactions, setTransactions] = useState([]);
-  const [dispatchOrders, setDispatchOrders] = useState([]);
+  const [dispatchOrdersArray, setDispatchOrders] = useState([]);
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -136,15 +136,14 @@ export const TransactionProvider = ({ children }) => {
     return new Promise(resolve => setTimeout(resolve, 3000));
   }
 
-  // const dispatchOrders = [];
   const orderForDispatch = () => {
 
     const { addressTo, amount, destAddress, drugName, temperature } = formData;
     let order = {"addressTo": addressTo, "amount": amount, "time": new Date(), "destAddress": destAddress, "drugName": drugName, "temperature": temperature};
-    dispatchOrders.push(order);
-    console.log("dispacthOrders: ", dispatchOrders);
+    // dispatchOrdersArray.push(order);
+    console.log("clicked btn, dispacthOrders: ", dispatchOrdersArray);
 
-    setDispatchOrders(dispatchOrders);
+    setDispatchOrders([...dispatchOrdersArray, order]);
   }
 
 
@@ -223,7 +222,7 @@ export const TransactionProvider = ({ children }) => {
         handleChange,
         sendTransaction,
         setDispatchOrders,
-        dispatchOrders,
+        dispatchOrdersArray,
         orderForDispatch,
 		    transactions,
 	    	isLoading
@@ -233,3 +232,6 @@ export const TransactionProvider = ({ children }) => {
     </TransactionContext.Provider>
   );
 };
+
+
+export const TransactionContext = React.createContext();

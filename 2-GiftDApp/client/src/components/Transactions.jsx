@@ -33,9 +33,12 @@ const DeliveryStatus = ({timestamp}) => {
 }
 
 
-const DispatchOrdersCard = ({addressTo, amount, destAddress, drugName, temperature }) => {
+// const DispatchOrdersCard = ({addressTo, amount, destAddress, drugName, temperature, time }) => {
+const DispatchOrdersCard = (order) => {
   //   const gifUrl = useFetch({ keyword });
 
+
+  console.log("%%%% order: ", order);
     return (
       <div className="bg-[#181918] m-4 flex flex-1
         2xl:min-w-[450px]
@@ -50,29 +53,26 @@ const DispatchOrdersCard = ({addressTo, amount, destAddress, drugName, temperatu
             {/* <a href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
               <p className="text-white text-base">From: {shortenAddress(addressFrom)}</p>
             </a> */}
-            {/* <a href={`https://ropsten.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
-              <p className="text-white text-base">To: {shortenAddress(addressTo)}</p>
-            </a> */}
-            <p className="text-white text-base">Amount: {amount} ETH</p>
-            {/* {message && (
+            <a href={`https://ropsten.etherscan.io/address/${order.order.addressTo}`} target="_blank" rel="noreferrer">
+              <p className="text-white text-base">To: {shortenAddress(order.order.addressTo)}</p>
+            </a>
+            <p className="text-white text-base">Amount: {order.order.amount} ETH</p>
+            {order.order.drugName && (
               <>
                 <br />
-                <p className="text-white text-base">Message: {message}</p>
+                <p className="text-white text-base">Drug: {order.order.drugName}</p>
               </>
-            )} */}
+            )}
           </div>
-          {/* {console.log("timestamp: ", timestamp)}
-          {console.log("timestamp- date: ", new Date(timestamp))} */}
-
-          {/* {console.log("timestamp- ts now diff : ",  (Math.floor(new Date().getTime() / 1000)) - Math.floor(new Date(timestamp).getTime() / 1000))} */}
-
-          {/* {const difD =  (Math.floor(new Date().getTime() / 1000)) - Math.floor(new Date(timestamp).getTime() / 1000))}
-          {console.log("timestamp- ts now diff days : ",  (difD) / (60 * 60 * 24) } */}
-          {/* <DeliveryStatus timestamp={timestamp} /> */}
-         {/* {true ? (timestamp ) : ()} */}
-          {/* <div className="bg-black p-3 px-5 w-max rounded-3xl -mt-5 shadow-2xl">
-            <p className="text-[#37c7da] font-bold">{timestamp}</p>
-          </div> */}
+          <img
+            src={ truck }
+            alt="nature"
+            className="w-full h-16 2xl:h-32 rounded-md shadow-lg object-cover"
+          />
+         {/* {true ? (timestamp ) : () */}
+          <div className="bg-black p-3 px-5 w-max rounded-3xl -mt-5 shadow-2xl">
+            {/* <p className="text-[#37c7da] font-bold">{order.order.time}</p> */}
+          </div>
         </div>
       </div>
     );
@@ -124,7 +124,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
 };
 
 const Transactions = () => {
-  const { transactions, currentAccount, dispatchOrders} = useContext(TransactionContext);
+  const { transactions, currentAccount, dispatchOrdersArray} = useContext(TransactionContext);
 
   return (
     <div className=" w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
@@ -140,11 +140,32 @@ const Transactions = () => {
             Connect your account to see the latest transactions
           </h3>
         )}
-        {console.log("###dispatchOrders: ", dispatchOrders)}
+        {console.log("###dispatchOrders: ",  dispatchOrdersArray)}
         <div className="flex flex-wrap justify-center items-center mt-10">
-          {dispatchOrders.map((order, i) => (
+
+         {/* *************Not working */}
+          {/* {dispatchOrdersArray.map((order, i) => (
             <DispatchOrdersCard key={i} obj={order} />
+            // <DispatchOrdersCard {...order} />
+          ))} */}
+
+         {/* *************Not working */}
+          {/* {dispatchOrdersArray.map((order) => (
+            <DispatchOrdersCard key={order.time}
+              addressTo={order.addressTo}
+              time= {order.time}
+              amount = {order.amount}
+              destAddress = {order.destAddress}
+              drugName = {order.drugName}
+              temperature = {order.temperature}
+              />
+          ))} */}
+
+          {dispatchOrdersArray.map((order) => (
+            <DispatchOrdersCard key = {order.time} order = {order}/>
           ))}
+
+
         </div>
       </div>
 

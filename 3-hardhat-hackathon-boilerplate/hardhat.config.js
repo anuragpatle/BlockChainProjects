@@ -5,12 +5,12 @@ require("@nomiclabs/hardhat-waffle");
 // testing the frontend.
 require("./tasks/faucet");
 
-// If you are using MetaMask, be sure to change the chainId to 1337
+// If you are using MetaMask, be sure to change the chainId to 1337 else 31337
 module.exports = {
   solidity: "0.8.0",
   networks: {
     hardhat: {
-      chainId: 31337
+      chainId: 1337
     }
   }
 };
