@@ -32,7 +32,7 @@ const SimpleInput = ({ placeholder, name, type, value }) => (
 );
 
 const Welcome = () => {
-  const { currentAccount, connectWallet, handleChange, sendTransaction, orderForDispatch, formData, isLoading, dispatchOrders } = useContext(TransactionContext);
+  const { currentAccount, connectWallet, handleChange, sendTransaction, orderForDispatch, formData, isLoading } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
     const { addressTo, amount, drugName, temperature, destAddress } = formData;
