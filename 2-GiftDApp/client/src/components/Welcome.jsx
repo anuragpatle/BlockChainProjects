@@ -134,7 +134,7 @@ const Welcome = () => {
                 onClick={handleSubmit}
                 className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
               >
-                Pay for Shipment
+                Proceed for Shipment
               </button>
             )}
           </div>

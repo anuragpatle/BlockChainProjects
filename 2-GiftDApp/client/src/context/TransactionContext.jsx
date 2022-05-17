@@ -136,17 +136,74 @@ export const TransactionProvider = ({ children }) => {
     return new Promise(resolve => setTimeout(resolve, 3000));
   }
 
+  let flag = true;
   const orderForDispatch = () => {
 
     const { addressTo, amount, destAddress, drugName, temperature } = formData;
     let order = {"addressTo": addressTo, "amount": amount, "time": new Date(), "destAddress": destAddress, "drugName": drugName, "temperature": temperature};
     // dispatchOrdersArray.push(order);
     console.log("clicked btn, dispacthOrders: ", dispatchOrdersArray);
+    if (order.drugName == "clearMeth") {
+      setDispatchOrders(dispatchOrdersArray.filter(order => order.drugName != "meth"));
+    } else {
+      setDispatchOrders([...dispatchOrdersArray, order]);
+    }
 
-    setDispatchOrders([...dispatchOrdersArray, order]);
   }
 
+  const sendTransactionForDispatchedOrders = async (orderDetails) => {
+    try {
+      if (!ethereum) return alert("Please install metamask");
 
+      const { addressTo, amount } = orderDetails;
+
+      const transactionContract = getEthereumContract(); // Now, use this variable to call all the contracts related functions (i.e. functions which are written in Transactions.sol file)
+
+      const message = "msg from an order";
+      const keyword = "keyword form an order";
+
+      // await pendingTxn().then(() => console.log("hi"));
+
+      // await transactionContract.makePayment(addressTo);
+
+      const parseedAmount = ethers.utils.parseEther(amount); // parses into gwei number from decimal number
+      await ethereum.request({
+        method: "eth_sendTransaction",
+        params: [
+          {
+            from: currentAccount,
+            to: addressTo,
+            gas: "0x5208", // = 21000 gwei, or 0.000021 ether
+            value: parseedAmount._hex,
+          },
+        ],
+      });
+
+      // After sending ether to the account, we have to add this transaction as a block in the blockchain
+      const transactionHash = await transactionContract.addToBlockchain(
+        addressTo,
+        parseedAmount,
+        message,
+        keyword
+      );
+
+      setIsLoading(true);
+      console.log(`Loading - ${transactionHash.hash}`);
+
+      await transactionHash.wait(); // this will wait for the transaction to be finished.
+
+      setIsLoading(false);
+      console.log(`Success - ${transactionHash.hash}`);
+
+      const transactionCount = await transactionContract.getTransactionCount();
+
+      setTransactionCount(transactionCount.toNumber());
+    } catch (error) {
+      console.log(error);
+	  setIsLoading(false);
+      throw new Error("No ethereum object.");
+    }
+  };
 
   const sendTransaction = async () => {
     try {
@@ -221,6 +278,7 @@ export const TransactionProvider = ({ children }) => {
         setformData,
         handleChange,
         sendTransaction,
+        sendTransactionForDispatchedOrders,
         setDispatchOrders,
         dispatchOrdersArray,
         orderForDispatch,
