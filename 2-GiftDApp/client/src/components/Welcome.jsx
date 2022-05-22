@@ -5,13 +5,11 @@ import { BsInfoCircle } from "react-icons/bs";
 
 import { TransactionContext } from "../context/TransactionContext";
 import { shortenAddress } from "../utils/shortenAddress";
-import { DispatchForm } from ".";
+import { DispatchForm, ConfirmDelivery } from ".";
 import { Routes, Route, Link } from "react-router-dom";
 
 const companyCommonStyles =
   "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
-
-
 
 const SimpleInput = ({ placeholder, name, type, value }) => (
   <input
@@ -24,9 +22,15 @@ const SimpleInput = ({ placeholder, name, type, value }) => (
 );
 
 const Welcome = () => {
-  const { currentAccount, connectWallet, handleChange, sendTransaction, orderForDispatch, formData, isLoading } = useContext(TransactionContext);
-
-
+  const {
+    currentAccount,
+    connectWallet,
+    handleChange,
+    sendTransaction,
+    orderForDispatch,
+    formData,
+    isLoading,
+  } = useContext(TransactionContext);
 
   return (
     <div className="flex w-full justify-center items-center">
@@ -36,7 +40,8 @@ const Welcome = () => {
             Ship Drugs <br /> with measures
           </h1>
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-            You can transport any drugs which need extensive care like maintaining a cretain temprature while shipment.
+            You can transport any drugs which need extensive care like
+            maintaining a cretain temprature while shipment.
           </p>
           {!currentAccount && (
             <button
@@ -89,11 +94,10 @@ const Welcome = () => {
             </div>
           </div>
 
-      <Routes>
-        {/* <Route index element={<ConfirmDelivery />} /> */}
-
-        <Route path="" element={<DispatchForm />} />
-      </Routes>
+          <Routes>
+            <Route path="/ConfirmDelivery" element={<ConfirmDelivery />} />
+            <Route path="" element={<DispatchForm />} />
+          </Routes>
         </div>
       </div>
     </div>

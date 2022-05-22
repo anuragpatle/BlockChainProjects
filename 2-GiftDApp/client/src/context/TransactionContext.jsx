@@ -3,8 +3,6 @@ import { ethers } from "ethers";
 
 import { contractABI, contractAddress } from "../utils/constants";
 
-
-
 // Get ethereum object from the metamask browser addon
 // Since we are using metamask wallet extention/addon on the browser, we have access to ethereum object.
 // You can check by going to the console of the browser, and write window.ethereum
@@ -31,7 +29,7 @@ export const TransactionProvider = ({ children }) => {
     amount: "",
     drugName: "",
     temperature: "",
-    destAddress: ""
+    destAddress: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -52,16 +50,21 @@ export const TransactionProvider = ({ children }) => {
       if (ethereum) {
         const transactionsContract = getEthereumContract();
 
-        const availableTransactions = await transactionsContract.getAllTransactions();
+        const availableTransactions =
+          await transactionsContract.getAllTransactions();
 
-        const structuredTransactions = availableTransactions.map((transaction) => ({
-          addressTo: transaction.receiver,
-          addressFrom: transaction.sender,
-          timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
-          message: transaction.message,
-          keyword: transaction.keyword,
-          amount: parseInt(transaction.amount._hex) / (10 ** 18)
-        }));
+        const structuredTransactions = availableTransactions.map(
+          (transaction) => ({
+            addressTo: transaction.receiver,
+            addressFrom: transaction.sender,
+            timestamp: new Date(
+              transaction.timestamp.toNumber() * 1000
+            ).toLocaleString(),
+            message: transaction.message,
+            keyword: transaction.keyword,
+            amount: parseInt(transaction.amount._hex) / 10 ** 18,
+          })
+        );
 
         console.log(structuredTransactions);
 
@@ -133,23 +136,37 @@ export const TransactionProvider = ({ children }) => {
   };
 
   const pendingTxn = () => {
-    return new Promise(resolve => setTimeout(resolve, 3000));
-  }
+    return new Promise((resolve) => setTimeout(resolve, 3000));
+  };
 
   let flag = true;
+  let orderCount = 0;
   const orderForDispatch = () => {
-
     const { addressTo, amount, destAddress, drugName, temperature } = formData;
-    let order = {"addressTo": addressTo, "amount": amount, "time": new Date(), "destAddress": destAddress, "drugName": drugName, "temperature": temperature};
+
+    orderCount += orderCount
+
+    let orderId = orderCount + Date.now();
+
+    let order = {
+      orderId: orderId,
+      addressTo: addressTo,
+      amount: amount,
+      time: new Date(),
+      destAddress: destAddress,
+      drugName: drugName,
+      temperature: temperature,
+    };
     // dispatchOrdersArray.push(order);
     console.log("clicked btn, dispacthOrders: ", dispatchOrdersArray);
     if (order.drugName == "clearMeth") {
-      setDispatchOrders(dispatchOrdersArray.filter(order => order.drugName != "meth"));
+      setDispatchOrders(
+        dispatchOrdersArray.filter((order) => order.drugName != "meth")
+      );
     } else {
       setDispatchOrders([...dispatchOrdersArray, order]);
     }
-
-  }
+  };
 
   const sendTransactionForDispatchedOrders = async (orderDetails) => {
     try {
@@ -200,7 +217,7 @@ export const TransactionProvider = ({ children }) => {
       setTransactionCount(transactionCount.toNumber());
     } catch (error) {
       console.log(error);
-	  setIsLoading(false);
+      setIsLoading(false);
       throw new Error("No ethereum object.");
     }
   };
@@ -212,7 +229,6 @@ export const TransactionProvider = ({ children }) => {
       const { addressTo, amount, keyword, message } = formData;
 
       const transactionContract = getEthereumContract(); // Now, use this variable to call all the contracts related functions (i.e. functions which are written in Transactions.sol file)
-
 
       await pendingTxn().then(() => console.log("hi"));
 
@@ -252,7 +268,7 @@ export const TransactionProvider = ({ children }) => {
       setTransactionCount(transactionCount.toNumber());
     } catch (error) {
       console.log(error);
-	  setIsLoading(false);
+      setIsLoading(false);
       throw new Error("No ethereum object.");
     }
   };
@@ -265,7 +281,7 @@ export const TransactionProvider = ({ children }) => {
    */
   useEffect(() => {
     checkIfWalletIsConnected();
-	checkIfTransactionsExists();
+    checkIfTransactionsExists();
   }, []);
 
   return (
@@ -282,14 +298,13 @@ export const TransactionProvider = ({ children }) => {
         setDispatchOrders,
         dispatchOrdersArray,
         orderForDispatch,
-		    transactions,
-	    	isLoading
+        transactions,
+        isLoading,
       }}
     >
       {children}
     </TransactionContext.Provider>
   );
 };
-
 
 export const TransactionContext = React.createContext();

@@ -1,6 +1,4 @@
 import React from "react";
-import deliveredBoxes from "../../images/box_small.jpg";
-import logo from "../../images/t-systems-mexico-squarelogo.png";
 import { BiPackage } from "react-icons/bi";
 
 const companyCommonStyles =
@@ -9,8 +7,7 @@ const companyCommonStyles =
 const Badge = ({ text, color }) => (
   <div className="flex-initial w-40">
     <span
-      style={{ fontWeight: "bold" }}
-      className={`bg-purple-100 text-${color}-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${color}-200 dark:text-{color}-900`}
+      className={`bg-${color}-100 text-${color}-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${color}-200 dark:text-{color}-900`}
     >
       {text}
     </span>
@@ -40,21 +37,21 @@ const ServiceCard = ({
 
       <div className="flex mt-2">
         <Badge text="Drug" color="green"></Badge>
-        <div className="font-bold mt-1 text-white text-sm md:w-9/12">
+        <div className=" mt-1 text-white text-sm md:w-9/12">
           {drugName}
         </div>
       </div>
 
       <div className="flex mt-2">
         <Badge text="Vendor" color="purple"></Badge>
-        <div className="font-bold mt-1 text-white text-sm md:w-9/12">
+        <div className=" mt-1 text-white text-sm md:w-9/12">
           {walletAddressAndvendorName}
         </div>
       </div>
 
       <div className="flex mt-2">
         <Badge text="Max Temp. (°C)" color="green"></Badge>
-        <div className="font-bold mt-1 text-white text-sm md:w-9/12">
+        <div className=" mt-1 text-white text-sm md:w-9/12">
          5
         </div>
       </div>
@@ -73,13 +70,13 @@ const ServiceCard = ({
       <div className="grid sm:grid-cols-2 grid-cols-2 w-full mt-10">
         <button
           type="button"
-          className="bg-green-100 text-black w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7f] rounded-full cursor-pointer"
+          className="bg-[#0080005c] bg-green-100 text-white font-bold w-32 mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7f] rounded-full cursor-pointer"
         >
           Yes
         </button>
         <button
           type="button"
-          className="bg-red-100 text-black w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7f] rounded-full cursor-pointer"
+          className="bg-[#9a20209c] text-green-200/100 font-bold w-32 mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7f] rounded-full cursor-pointer"
         >
           No
         </button>
@@ -102,7 +99,7 @@ const ServiceCard = ({
 function ConfirmDelivery() {
   return (
     <div>
-      <div className="flex w-full justify-center items-center gradient-bg-services">
+      <div className="flex w-full justify-center items-center ">
         <div className="flex mf:flex-row flex-col items-center justify-between md:p-20 py-12 px-4">
           <div className="flex-1 flex flex-col justify-start items-center">
             <ServiceCard
@@ -112,7 +109,7 @@ function ConfirmDelivery() {
               icon={<BiPackage fontSize={21} className="text-white" />}
               subtitle="5 °C as permissible Temperature"
               orderDate="Ordered On 20 May 2020"
-              walletAddressAndvendorName="From wallet address 0xcC..7u | Zealin"
+              walletAddressAndvendorName="Wallet Ad. 0xcC..7u | Zealin"
             />
 
           </div>
