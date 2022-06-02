@@ -112,6 +112,7 @@ const DispatchOrdersCard = (order) => {
           <p className="text-[#37c7da] font-bold">{order.order.time}</p>
         </div> */}
       </div>
+
     </div>
   );
 };
@@ -219,7 +220,7 @@ const Transactions = () => {
           ))} */}
 
           {dispatchOrdersArray.map((order) => (
-            <DispatchOrdersCard key={order.time} order={order} />
+            <DispatchOrdersCard key={order.orderId} order={order} />
           ))}
         </div>
       </div>

@@ -144,9 +144,10 @@ export const TransactionProvider = ({ children }) => {
   const orderForDispatch = () => {
     const { addressTo, amount, destAddress, drugName, temperature } = formData;
 
-    orderCount += orderCount
+    let timestaamp = Date.now();
 
-    let orderId = orderCount + Date.now();
+    orderCount = orderCount + 1;
+    let orderId = orderCount + "" + timestaamp;
 
     let order = {
       orderId: orderId,
@@ -158,7 +159,7 @@ export const TransactionProvider = ({ children }) => {
       temperature: temperature,
     };
     // dispatchOrdersArray.push(order);
-    console.log("clicked btn, dispacthOrders: ", dispatchOrdersArray);
+    // console.log("clicked btn, dispacthOrders: ", dispatchOrdersArray);
     if (order.drugName == "clearMeth") {
       setDispatchOrders(
         dispatchOrdersArray.filter((order) => order.drugName != "meth")

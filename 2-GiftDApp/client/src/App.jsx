@@ -15,10 +15,14 @@ const App = () => (
       <div className="gradient-bg-welcome">
         <Navbar />
         <Welcome />
+
+        {/* <Routes>
+          <Route path="/ConfirmDelivery" element={<ConfirmDelivery />} />
+        </Routes> */}
       </div>
+      <Services />
       <Routes>
-        <Route path="" element={[ <Services/>, <Transactions />]} />
-        {/* <Route path="/ConfirmDelivery" element={<ConfirmDelivery />} /> */}
+        <Route path="/" element={<Transactions />} />
       </Routes>
       <Footer />
     </div>

@@ -5,7 +5,7 @@ import { BsInfoCircle } from "react-icons/bs";
 
 import { TransactionContext } from "../context/TransactionContext";
 import { shortenAddress } from "../utils/shortenAddress";
-import { DispatchForm, ConfirmDelivery } from ".";
+import { DispatchForm, ConfirmDelivery, Transactions, Services } from ".";
 import { Routes, Route, Link } from "react-router-dom";
 
 const companyCommonStyles =
@@ -30,11 +30,13 @@ const Welcome = () => {
     orderForDispatch,
     formData,
     isLoading,
+    dispatchOrdersArray,
+    setDispatchOrders,
   } = useContext(TransactionContext);
 
   return (
     <div className="flex w-full justify-center items-center">
-      <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
+      <div className="flex mf:flex-row flex-col items-start justify-between md:p-5 ">
         <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
           <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
             Ship Drugs <br /> with measures
@@ -92,11 +94,12 @@ const Welcome = () => {
                 </p>
               </div>
             </div>
-          </div>
 
+          </div>
           <Routes>
+            <Route path="/" element={<DispatchForm />} />
+            {/* <Route path="/ConfirmDelivery" element={<ConfirmDelivery />} /> */}
             <Route path="/ConfirmDelivery" element={<ConfirmDelivery />} />
-            <Route path="" element={<DispatchForm />} />
           </Routes>
         </div>
       </div>

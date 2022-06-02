@@ -13,22 +13,27 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 );
 
-const handleSubmit = (e) => {
-  const { addressTo, amount, drugName, temperature, destAddress } = formData;
 
-  // Usually when you submit a form, the page reloads.
-  // preventDefault() prevents this.
-  // e.preventDefault();
-
-  if (!addressTo || !amount || !drugName || !temperature || !destAddress)
-    return;
-
-  // sendTransaction();
-  orderForDispatch();
-};
 
 function DispatchForm() {
-  const { handleChange, isLoading } = useContext(TransactionContext);
+  const { handleChange, formData, isLoading, orderForDispatch } = useContext(TransactionContext);
+
+  const handleSubmit = (e) => {
+    const { addressTo, amount, drugName, temperature, destAddress } = formData;
+
+    // Usually when you submit a form, the page reloads.
+    // preventDefault() prevents this.
+    e.preventDefault();
+
+    if (!addressTo || !amount || !drugName || !temperature || !destAddress)
+      return;
+
+    // sendTransaction();
+
+    orderForDispatch();
+
+  };
+
   return (
     <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
       {/* <Input placeholder="Address To"  name="addressTo" type="text" handleChange={handleChange} />
