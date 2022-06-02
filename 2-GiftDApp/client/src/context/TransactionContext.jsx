@@ -8,6 +8,8 @@ import { contractABI, contractAddress } from "../utils/constants";
 // You can check by going to the console of the browser, and write window.ethereum
 const { ethereum } = window;
 
+const ordersUrl = "http://localhost:5000/orders";
+
 const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
@@ -149,24 +151,49 @@ export const TransactionProvider = ({ children }) => {
     orderCount = orderCount + 1;
     let orderId = orderCount + "" + timestaamp;
 
-    let order = {
-      orderId: orderId,
-      addressTo: addressTo,
-      amount: amount,
-      time: new Date(),
-      destAddress: destAddress,
-      drugName: drugName,
-      temperature: temperature,
-    };
+    // let order = {
+    //   orderId: orderId,
+    //   addressTo: addressTo,
+    //   amount: amount,
+    //   time: new Date(),
+    //   destAddress: destAddress,
+    //   drugName: drugName,
+    //   temperature: temperature,
+    // };
     // dispatchOrdersArray.push(order);
     // console.log("clicked btn, dispacthOrders: ", dispatchOrdersArray);
-    if (order.drugName == "clearMeth") {
-      setDispatchOrders(
-        dispatchOrdersArray.filter((order) => order.drugName != "meth")
-      );
-    } else {
-      setDispatchOrders([...dispatchOrdersArray, order]);
+    // if (order.drugName == "clearMeth") {
+    //   setDispatchOrders(
+    //     dispatchOrdersArray.filter((order) => order.drugName != "meth")
+    //   );
+    // } else {
+    //   setDispatchOrders([...dispatchOrdersArray, order]);
+    // }
+
+
+
+    let orderToPost = {
+      "orderId": orderId,
+      "ethAddress": addressTo,
+      "amount": amount,
+      "product": drugName,
+      "criticalTemperatureInCelcius": temperature,
+      "destinationAddress": destAddress,
+      "deliveryStatus": "ON_THE_WAY",
+      "deliveryFailureReason": ""
     }
+
+    fetch(ordersUrl, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(orderToPost),
+    }).then((result) => {
+      result.json().then((res) => {
+        console.warn("res", res);
+      });
+    });
   };
 
   const sendTransactionForDispatchedOrders = async (orderDetails) => {
