@@ -42,3 +42,8 @@ npm install --save ethers
 ..\client$ npm run dev
 
 ```
+
+# ------------------------------------------------------
+# jSON SERVER
+## Run json server at port 5000
+$ npm run server

@@ -9,6 +9,8 @@ import deliveredBoxes from "../../images/box.jpg";
 import dummyData from "../utils/dummyData";
 import { shortenAddress } from "../utils/shortenAddress";
 
+const ordersUrl = "http://localhost:5000/orders";
+
 const DeliveryStatus = ({ obj }) => {
   const { sendTransactionForDispatchedOrders } = useContext(TransactionContext);
 
@@ -218,6 +220,8 @@ const Transactions = () => {
               temperature = {order.temperature}
               />
           ))} */}
+
+
 
           {dispatchOrdersArray.map((order) => (
             <DispatchOrdersCard key={order.orderId} order={order} />
