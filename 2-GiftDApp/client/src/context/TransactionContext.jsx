@@ -10,6 +10,7 @@ const { ethereum } = window;
 
 const ordersUrl = "http://localhost:5000/orders";
 
+
 const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
@@ -26,6 +27,7 @@ const getEthereumContract = () => {
 
 export const TransactionProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
+
   const [formData, setformData] = useState({
     addressTo: "",
     amount: "",
@@ -41,11 +43,55 @@ export const TransactionProvider = ({ children }) => {
   ); // saving transaction count in local storage
 
   const [transactions, setTransactions] = useState([]);
-  const [dispatchOrdersArray, setDispatchOrders] = useState([]);
+  const [pendingOrdersArray, setPendingOrders] = useState([]);
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
   };
+
+  const updateTransactionStatusOfOrder = (id, status) => {
+    const dataToUpdate = {
+      transactionStatus: status,
+    };
+
+    console.log("dataToUpdate: " + JSON.stringify(dataToUpdate));
+
+    fetch(ordersUrl + "/" + id, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(dataToUpdate),
+    }).then((result) => {
+      result.json().then((res) => {
+        console.warn("res", res);
+      });
+    });
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch(ordersUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          // setPendingOrders([...data]);
+          setPendingOrders(
+            data.filter((data) => {
+              if (
+                (data.transactionStatus === "NOT_INITIATED" ||
+                  data.transactionStatus === "PENDING_PAYMENT" ||
+                  data.transactionStatus === "INITIATED") ||
+                data.transactionStatus === "NOT_INITIATED"
+              ) {
+                return true;
+              }
+            })
+          );
+        });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const getAllTransactions = async () => {
     try {
@@ -141,7 +187,6 @@ export const TransactionProvider = ({ children }) => {
     return new Promise((resolve) => setTimeout(resolve, 3000));
   };
 
-  let flag = true;
   let orderCount = 0;
   const orderForDispatch = () => {
     const { addressTo, amount, destAddress, drugName, temperature } = formData;
@@ -160,28 +205,27 @@ export const TransactionProvider = ({ children }) => {
     //   drugName: drugName,
     //   temperature: temperature,
     // };
-    // dispatchOrdersArray.push(order);
-    // console.log("clicked btn, dispacthOrders: ", dispatchOrdersArray);
+    // pendingOrdersArray.push(order);
+    // console.log("clicked btn, dispacthOrders: ", pendingOrdersArray);
     // if (order.drugName == "clearMeth") {
-    //   setDispatchOrders(
-    //     dispatchOrdersArray.filter((order) => order.drugName != "meth")
+    //   setPendingOrders(
+    //     pendingOrdersArray.filter((order) => order.drugName != "meth")
     //   );
     // } else {
-    //   setDispatchOrders([...dispatchOrdersArray, order]);
+    //   setPendingOrders([...pendingOrdersArray, order]);
     // }
 
-
-
     let orderToPost = {
-      "orderId": orderId,
-      "ethAddress": addressTo,
-      "amount": amount,
-      "product": drugName,
-      "criticalTemperatureInCelcius": temperature,
-      "destinationAddress": destAddress,
-      "deliveryStatus": "ON_THE_WAY",
-      "deliveryFailureReason": ""
-    }
+      orderId: orderId,
+      ethAddress: addressTo,
+      amount: amount,
+      product: drugName,
+      criticalTemperatureInCelcius: temperature,
+      destinationAddress: destAddress,
+      deliveryStatus: "ON_THE_WAY",
+      deliveryFailureReason: "",
+      transactionStatus: "NOT_INITIATED",
+    };
 
     fetch(ordersUrl, {
       method: "POST",
@@ -200,12 +244,14 @@ export const TransactionProvider = ({ children }) => {
     try {
       if (!ethereum) return alert("Please install metamask");
 
-      const { addressTo, amount } = orderDetails;
+      const { id, orderId, ethAddress, amount } = orderDetails;
+
+      updateTransactionStatusOfOrder(id, "INITIATED");
 
       const transactionContract = getEthereumContract(); // Now, use this variable to call all the contracts related functions (i.e. functions which are written in Transactions.sol file)
 
-      const message = "msg from an order";
-      const keyword = "keyword form an order";
+      const message = JSON.stringify(orderDetails);
+      const keyword = orderId;
 
       // await pendingTxn().then(() => console.log("hi"));
 
@@ -217,7 +263,7 @@ export const TransactionProvider = ({ children }) => {
         params: [
           {
             from: currentAccount,
-            to: addressTo,
+            to: ethAddress,
             gas: "0x5208", // = 21000 gwei, or 0.000021 ether
             value: parseedAmount._hex,
           },
@@ -226,7 +272,7 @@ export const TransactionProvider = ({ children }) => {
 
       // After sending ether to the account, we have to add this transaction as a block in the blockchain
       const transactionHash = await transactionContract.addToBlockchain(
-        addressTo,
+        ethAddress,
         parseedAmount,
         message,
         keyword
@@ -239,7 +285,7 @@ export const TransactionProvider = ({ children }) => {
 
       setIsLoading(false);
       console.log(`Success - ${transactionHash.hash}`);
-
+      updateTransactionStatusOfOrder(id, "COMPLETE");
       const transactionCount = await transactionContract.getTransactionCount();
 
       setTransactionCount(transactionCount.toNumber());
@@ -323,8 +369,8 @@ export const TransactionProvider = ({ children }) => {
         handleChange,
         sendTransaction,
         sendTransactionForDispatchedOrders,
-        setDispatchOrders,
-        dispatchOrdersArray,
+        setPendingOrders,
+        pendingOrdersArray,
         orderForDispatch,
         transactions,
         isLoading,
