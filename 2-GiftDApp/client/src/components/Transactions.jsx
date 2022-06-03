@@ -74,51 +74,88 @@ const DispatchOrdersCard = (order) => {
 
   return (
     <div
-      className="bg-[#181918] m-4 flex flex-1
+      className="border-2 border-pink-800 bg-[#181918] m-4 flex flex-1
         3xl:min-w-[450px]
         3xl:max-w-[500px]
         sm:min-w-[270px]
         sm:max-w-[300px]
         min-w-full
-        flex-col p-3 rounded-md hover:shadow-2xl"
+        flex-col p-3 rounded-lg hover:shadow-2xl"
     >
       <div className="flex flex-col items-center w-full mt-3">
         <div className="display-flex justify-start w-full mb-6 p-2">
-          <a
-            href={`https://ropsten.etherscan.io/address/${order.order.ethAddress}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <p className="text-white text-base">
-              From: {shortenAddress(order.order.ethAddress)}
-            </p>
-          </a>
-          <a
-            href={`https://ropsten.etherscan.io/address/${order.order.ethAddress}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <p className="text-white text-base">
-              To: {shortenAddress(order.order.ethAddress)}
-            </p>
-            <p className="text-white text-base">
-              Product: {order.order.product}
-            </p>
-          </a>
-          <p className="text-white text-base">
-            Amount: {order.order.amount} ETH
-          </p>
-          <p className="text-white text-base">
-            Temperature: {order.order.criticalTemperatureInCelcius} Degree C
-          </p>
-          {order.order.drugName && (
-            <>
-              <br />
+          <div className="flex mt-2">
+            <div className="flex-initial w-40">
+              <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
+                From
+              </span>
+            </div>
+            <div className=" mt-1 text-white text-sm md:w-9/12">
+              <a
+                href={`https://ropsten.etherscan.io/address/${order.order.ethAddress}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <p className="text-white text-base">
+                  {shortenAddress(order.order.ethAddress)}
+                </p>
+              </a>
+            </div>
+          </div>
+
+          <div className="flex mt-2">
+            <div className="flex-initial w-40">
+              <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
+                To
+              </span>
+            </div>
+            <div className=" mt-1 text-white text-sm md:w-9/12">
+              <a
+                href={`https://ropsten.etherscan.io/address/${order.order.ethAddress}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <p className="text-white text-base">
+                  {shortenAddress(order.order.ethAddress)}
+                </p>
+              </a>
+            </div>
+          </div>
+
+          <div className="flex mt-2">
+            <div className="flex-initial w-40">
+              <span className="bg-[cornflowerblue] text-cornflowerblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cornflowerblue-700 dark:text-cornflowerblue-300">
+                Product
+              </span>
+            </div>
+            <div className=" mt-1 text-white text-sm md:w-9/12">
+              <p className="text-white text-base">{order.order.product}</p>
+            </div>
+          </div>
+
+          <div className="flex mt-2">
+            <div className="flex-initial w-40">
+              <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
+                Amount
+              </span>
+            </div>
+            <div className=" mt-1 text-white text-sm md:w-9/12">
+              <p className="text-white text-base">{order.order.amount} ETH</p>
+            </div>
+          </div>
+
+          <div className="flex mt-2">
+            <div className="flex-initial w-40">
+              <span className="bg-[firebrick] text-firebrick-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-firebrick-700 dark:text-firebrick-300">
+                Temperature
+              </span>
+            </div>
+            <div className=" mt-1 text-white text-sm md:w-9/12">
               <p className="text-white text-base">
-                Drug: {order.order.product}
+                {order.order.criticalTemperatureInCelcius} Degree C
               </p>
-            </>
-          )}
+            </div>
+          </div>
         </div>
         <DeliveryStatus obj={order.order} />
       </div>
@@ -200,7 +237,7 @@ const Transactions = () => {
             Connect your account to see the latest transactions
           </h3>
         )}
-        {console.log("###dispatchOrders: ", pendingOrdersArray)}
+        {/* {console.log("###dispatchOrders: ", pendingOrdersArray)} */}
         <div className="flex flex-wrap justify-center items-center mt-10">
           {pendingOrdersArray.map((order) => (
             <DispatchOrdersCard key={order.orderId} order={order} />

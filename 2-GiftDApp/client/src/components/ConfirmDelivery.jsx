@@ -36,7 +36,7 @@ const ServiceCard = ({
 
       <div className="flex mt-2">
         <div className="flex-initial w-40">
-          <span className="bg-[darkmagenta] text-gray-800 text-sm font-semibold  mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">
+          <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold  mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
             Order Id
           </span>
         </div>
@@ -45,7 +45,7 @@ const ServiceCard = ({
 
       <div className="flex mt-2">
         <div className="flex-initial w-40">
-          <span className="bg-[darkmagenta] text-gray-800 text-sm font-semibold  mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">
+          <span className="bg-[cornflowerblue] text-cornflowerblue-800 text-sm font-semibold  mr-2 px-2.5 py-0.5 rounded dark:bg-cornflowerblue-700 dark:text-cornflowerblue-300">
             Drug
           </span>
         </div>
@@ -65,17 +65,17 @@ const ServiceCard = ({
 
       <div className="flex mt-2">
         <div className="flex-initial w-40">
-          <span className="bg-[orangered] text-orangered-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-orangered-700 dark:text-orangered-300">
+          <span className="bg-[firebrick] text-firebrick-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-firebrick-700 dark:text-firebrick-300">
             Max Temp. (°C)
           </span>
         </div>
         <div className=" mt-1 text-white text-sm md:w-9/12">5</div>
       </div>
 
-      <div className="flex mt-2">
+      {/* <div className="flex mt-2">
         <Badge text="Time" color="gray"></Badge>
-        <div className=" mt-1 text-white text-sm md:w-9/12">22 May 202</div>
-      </div>
+        <div className=" mt-1 text-white text-sm md:w-9/12">22 May 2022</div>
+      </div> */}
 
       {/* <p className="mt-1 text-white text-sm md:w-9/12">
         Time
