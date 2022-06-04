@@ -6,3 +6,4 @@ export { default as Transactions } from './Transactions';
 export { default as Welcome } from './Welcome';
 export { default as ConfirmDelivery } from './ConfirmDelivery';
 export { default as DispatchForm } from './DispatchForm';
+export { default as MessageModal } from './MessageModal';

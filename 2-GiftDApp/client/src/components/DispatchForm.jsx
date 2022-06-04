@@ -34,20 +34,13 @@ function DispatchForm() {
 
   return (
     <div className="border-2 border-amber-900 p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-      {/* <Input placeholder="Address To"  name="addressTo" type="text" handleChange={handleChange} />
-            <Input placeholder="Amount (ETH): 0.0005 ETH" name="amount" type="number" handleChange={handleChange} />
-            <SimpleInput placeholder="Drug Name" name="dn" type="text"/>
-            <SimpleInput placeholder="Temprature Limit (degree C)" name="tl" type="text"/>
-            <SimpleInput placeholder="Quantity" name="Quantity" type="number"/>
-            <SimpleInput placeholder="Delivery Address" name="da" type="text"/> */}
-      {/* <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} /> */}
 
       <div className="mt-2 flex flex-col items-center w-full ">
         <div className="display-flex justify-start w-full mb-2">
           <div className="flex ">
             <div className="flex-initial mt-2 mr-1 w-20">
               <div className="w-full bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
-                From
+                To
               </div>
             </div>
             <div className="text-white text-sm md:w-9/12">
@@ -92,7 +85,7 @@ function DispatchForm() {
             </div>
             <div className=" text-white text-sm md:w-9/12">
               <Input
-                placeholder="Name of the Drug"
+                placeholder="Name of the Product"
                 name="drugName"
                 type="text"
                 handleChange={handleChange}

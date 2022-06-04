@@ -38,6 +38,21 @@ export const TransactionProvider = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const [show, setMsgModalOpen] = useState(false);
+  const [ethNetworkStoredData, setSthNetworkStoredData] = useState(false);
+
+  const handleMsgModalClose = () => {
+    setMsgModalOpen(false);
+  };
+
+  const callSetSthNetworkStoredData = (data) => {
+    setSthNetworkStoredData(data);
+  }
+
+  const handleMsgModalOpen = () => {
+    setMsgModalOpen(true);
+  };
+
   const [transactionCount, setTransactionCount] = useState(
     localStorage.getItem("transactionCount")
   ); // saving transaction count in local storage
@@ -195,25 +210,6 @@ export const TransactionProvider = ({ children }) => {
 
     orderCount = orderCount + 1;
     let orderId = orderCount + "" + timestaamp;
-
-    // let order = {
-    //   orderId: orderId,
-    //   addressTo: addressTo,
-    //   amount: amount,
-    //   time: new Date(),
-    //   destAddress: destAddress,
-    //   drugName: drugName,
-    //   temperature: temperature,
-    // };
-    // pendingOrdersArray.push(order);
-    // console.log("clicked btn, dispacthOrders: ", pendingOrdersArray);
-    // if (order.drugName == "clearMeth") {
-    //   setPendingOrders(
-    //     pendingOrdersArray.filter((order) => order.drugName != "meth")
-    //   );
-    // } else {
-    //   setPendingOrders([...pendingOrdersArray, order]);
-    // }
 
     let orderToPost = {
       orderId: orderId,
@@ -374,6 +370,11 @@ export const TransactionProvider = ({ children }) => {
         orderForDispatch,
         transactions,
         isLoading,
+        show,
+        handleMsgModalOpen,
+        handleMsgModalClose,
+        ethNetworkStoredData,
+        callSetSthNetworkStoredData
       }}
     >
       {children}
