@@ -2,6 +2,11 @@
   "owner": {
     "ethAddress": "0x5B9c17ACDC46C5354689dAB54aF04C267291bca4"
   },
+  "metadata": {
+    "transactionStatus-values": "NOT_INITIATED -> INITIATED -> PENDING_PAYMENT -> COMPLETE (or) FAILED (or) ABORTED",
+    "deliveryStatus-values": "ON_THE_WAY -> REACHED (optional i.e. receiver can claim that he has received the order) -> ACCEPTED (or) FAILED",
+    "deliveryFailureReason-values": "TEMPERATURE_CROSSED_CRITICAL_VALUE, CUSTOMER_REJECTED"
+  },
   "orders": [
     {
       "orderId": "11654259261216",
@@ -24,7 +29,7 @@
       "destinationAddress": "ABC Corp. Pune",
       "deliveryStatus": "REACHED",
       "deliveryFailureReason": "",
-      "transactionStatus": "COMPLETE",
+      "transactionStatus": "INITIATED",
       "id": "2pzpXcb"
     }
   ]

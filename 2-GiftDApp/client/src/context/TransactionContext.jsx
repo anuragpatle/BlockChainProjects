@@ -84,6 +84,27 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
+  const updateDeliveryStatusOfOrder = (id, status) => {
+    console.log("updateDeliveryStatusOfOrder: ", id, ", ", status);
+    const dataToUpdate = {
+      deliveryStatus: status,
+    };
+
+    console.log("dataToUpdate: " + JSON.stringify(dataToUpdate));
+
+    fetch(ordersUrl + "/" + id, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(dataToUpdate),
+    }).then((result) => {
+      result.json().then((res) => {
+        console.warn("res", res);
+      });
+    });
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       fetch(ordersUrl)
@@ -95,8 +116,7 @@ export const TransactionProvider = ({ children }) => {
               if (
                 (data.transactionStatus === "NOT_INITIATED" ||
                   data.transactionStatus === "PENDING_PAYMENT" ||
-                  data.transactionStatus === "INITIATED") ||
-                data.transactionStatus === "NOT_INITIATED"
+                  data.transactionStatus === "INITIATED" )
               ) {
                 return true;
               }
@@ -236,6 +256,8 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
+
+
   const sendTransactionForDispatchedOrders = async (orderDetails) => {
     try {
       if (!ethereum) return alert("Please install metamask");
@@ -251,7 +273,7 @@ export const TransactionProvider = ({ children }) => {
 
       // await pendingTxn().then(() => console.log("hi"));
 
-      // await transactionContract.makePayment(addressTo);
+      // await transactionContract.sendViaCall(ethAddress);
 
       const parseedAmount = ethers.utils.parseEther(amount); // parses into gwei number from decimal number
       await ethereum.request({
@@ -374,7 +396,8 @@ export const TransactionProvider = ({ children }) => {
         handleMsgModalOpen,
         handleMsgModalClose,
         ethNetworkStoredData,
-        callSetSthNetworkStoredData
+        callSetSthNetworkStoredData,
+        updateDeliveryStatusOfOrder
       }}
     >
       {children}

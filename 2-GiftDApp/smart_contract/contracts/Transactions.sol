@@ -4,12 +4,19 @@ pragma solidity ^0.8.0;
 contract Transactions {
     uint256 transactionCount;
 
-    event Transfer(address from, address receiver, uint amount, string message, uint256 timestamp, string keyword);
+    event Transfer(
+        address from,
+        address receiver,
+        uint256 amount,
+        string message,
+        uint256 timestamp,
+        string keyword
+    );
 
     struct TransferStruct {
         address sender;
         address receiver;
-        uint amount;
+        uint256 amount;
         string message;
         uint256 timestamp;
         string keyword;
@@ -17,16 +24,39 @@ contract Transactions {
 
     TransferStruct[] transactions;
 
-
-
-    function addToBlockchain(address payable receiver, uint amount, string memory message, string memory keyword) public {
+    function addToBlockchain(
+        address payable receiver,
+        uint256 amount,
+        string memory message,
+        string memory keyword
+    ) public {
         transactionCount += 1;
-        transactions.push(TransferStruct(msg.sender, receiver, amount, message, block.timestamp, keyword));
+        transactions.push(
+            TransferStruct(
+                msg.sender,
+                receiver,
+                amount,
+                message,
+                block.timestamp,
+                keyword
+            )
+        );
 
-        emit Transfer(msg.sender, receiver, amount, message, block.timestamp, keyword);
+        emit Transfer(
+            msg.sender,
+            receiver,
+            amount,
+            message,
+            block.timestamp,
+            keyword
+        );
     }
 
-    function getAllTransactions() public view returns (TransferStruct[] memory) {
+    function getAllTransactions()
+        public
+        view
+        returns (TransferStruct[] memory)
+    {
         return transactions;
     }
 
@@ -34,7 +64,11 @@ contract Transactions {
         return transactionCount;
     }
 
-    function parseAddr(string memory _a) internal pure returns (address _parsedAddress) {
+    function parseAddr(string memory _a)
+        internal
+        pure
+        returns (address _parsedAddress)
+    {
         bytes memory tmp = bytes(_a);
         uint160 iaddr = 0;
         uint160 b1;
@@ -62,22 +96,27 @@ contract Transactions {
         return address(iaddr);
     }
 
-    function makePayment(address payable _to) payable public  {
-
-
-
+    function makePayment(address payable _to) public payable {
         _to.transfer(0.0005 ether);
 
         // address adr = 0xB59e9Cf481060c06cA7BB317dE9383f89106A391;
-
     }
 
     function someFun() public {
-        (bool success,  ) = address(this).call{value: 0.0005 ether}(abi.encodeWithSignature("someOtherFunction(uint256)", 21000));
+        (bool success, ) = address(this).call{value: 0.0005 ether}(
+            abi.encodeWithSignature("someOtherFunction(uint256)", 21000)
+        );
         require(success, "Contract execution Failed");
     }
 
-    function someOtherFunction(uint _myVar) public {
+    function someOtherFunction(uint256 _myVar) public {
         //do something
+    }
+
+    function sendViaCall(address payable _to) public payable {
+        // Call returns a boolean value indicating success or failure.
+        // This is the current recommended method to use.
+        (bool sent, bytes memory data) = _to.call{value: msg.value}("");
+        require(sent, "Failed to send Ether");
     }
 }

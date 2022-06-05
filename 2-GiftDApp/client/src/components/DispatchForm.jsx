@@ -22,7 +22,7 @@ function DispatchForm() {
 
     // Usually when you submit a form, the page reloads.
     // preventDefault() prevents this.
-    e.preventDefault();
+    // e.preventDefault();
 
     if (!addressTo || !amount || !drugName || !temperature || !destAddress)
       return;
