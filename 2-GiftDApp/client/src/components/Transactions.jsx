@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { TransactionContext } from "../context/TransactionContext";
 
 import truck from "../../gifs/truck.gif";
+import iccv from "../../images/temp-crossed-critical-value.png";
 import deliveredBoxes from "../../images/box.jpg";
 
 // import useFetch from "../hooks/useFetch";
@@ -11,31 +12,50 @@ import { shortenAddress } from "../utils/shortenAddress";
 const ordersUrl = "http://localhost:5000/orders";
 
 const DeliveryStatus = ({ obj }) => {
-  const { sendTransactionForDispatchedOrders } = useContext(TransactionContext);
-
+  const {
+    sendTransactionForDispatchedOrders,
+    sendTransactionForFailedOrders,
+    proceedOrdersBtnTxt,
+    setProceedOrdersBtnTxt
+  } = useContext(TransactionContext);
+  // let text = "Proceed to Pay Ethers";
+  setProceedOrdersBtnTxt("Proceed to Pay Ethers");
   const handlePayment = (e) => {
-    console.log("%%% obj: ", obj);
     sendTransactionForDispatchedOrders(obj);
   };
+
+  const handleFailedTransaction = (e) => {
+    console.log("%%% handleFailedTransaction, obj: ", obj);
+    setProceedOrdersBtnTxt("Finalizing..");
+    sendTransactionForFailedOrders(obj);
+  };
+
+  let clickHandler;
 
   // const tsNow = Math.floor(new Date().getTime() / 1000);
   // const ts = Math.floor(new Date(obj.time).getTime() / 1000);
   // const diff = tsNow - ts;
-  let text = "Proceed to Pay Ethers";
   let _classNameBtn =
     "text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer";
   let imgPath = "";
-
+  clickHandler = handlePayment;
   if (obj.deliveryStatus === "ON_THE_WAY") {
-    text = "On the way";
+    setProceedOrdersBtnTxt("On the way");
     _classNameBtn = _classNameBtn + " pointer-events-none";
     imgPath = truck;
+  } else if (
+    obj.deliveryFailureReason === "TEMPERATURE_CROSSED_CRITICAL_VALUE"
+  ) {
+    setProceedOrdersBtnTxt("Finalize");
+    // _classNameBtn = _classNameBtn + " pointer-events-none";
+    imgPath = iccv;
+    clickHandler = handleFailedTransaction;
   } else if (
     obj.transactionStatus === "INITIATED" ||
     obj.transactionStatus === "PENDING_PAYMENT"
   ) {
     _classNameBtn = _classNameBtn + " pointer-events-none";
-    text = "Processing Transaction";
+    setProceedOrdersBtnTxt("Processing Transaction");
     imgPath = deliveredBoxes;
   } else {
     imgPath = deliveredBoxes;
@@ -56,10 +76,10 @@ const DeliveryStatus = ({ obj }) => {
       <button
         disabled={obj.deliveryStatus === "ON_THE_WAY" ? true : false}
         type="button"
-        onClick={handlePayment}
+        onClick={clickHandler}
         className={_classNameBtn}
       >
-        {text}
+        {proceedOrdersBtnTxt}
       </button>
     </div>
   );
@@ -84,7 +104,7 @@ const DispatchOrdersCard = (order) => {
       <div className="flex flex-col items-center w-full mt-3">
         <div className="display-flex justify-start w-full mb-6 p-2">
           <div className="flex mt-2">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
                 To
               </span>
@@ -103,7 +123,7 @@ const DispatchOrdersCard = (order) => {
           </div>
 
           <div className="flex mt-2">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[cornflowerblue] text-cornflowerblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cornflowerblue-700 dark:text-cornflowerblue-300">
                 Product
               </span>
@@ -114,7 +134,7 @@ const DispatchOrdersCard = (order) => {
           </div>
 
           <div className="flex mt-2">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
                 Amount
               </span>
@@ -125,14 +145,27 @@ const DispatchOrdersCard = (order) => {
           </div>
 
           <div className="flex mt-2">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[firebrick] text-firebrick-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-firebrick-700 dark:text-firebrick-300">
-                Temperature
+                Critical Temp.
               </span>
             </div>
             <div className=" mt-1 text-white text-sm md:w-9/12">
               <p className="text-white text-base">
                 {order.order.criticalTemperatureInCelcius} °C
+              </p>
+            </div>
+          </div>
+
+          <div className="flex mt-2">
+            <div className="flex-initial w-64">
+              <span className="bg-[firebrick] text-firebrick-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-firebrick-700 dark:text-firebrick-300">
+                Current Temp.
+              </span>
+            </div>
+            <div className=" mt-1 text-white text-sm md:w-9/12">
+              <p className="text-white text-base">
+                {order.order.currentTemperature} °C
               </p>
             </div>
           </div>
@@ -210,7 +243,7 @@ const TransactionsCard = ({
       <div className="flex flex-col items-center w-full mt-3">
         <div className="display-flex justify-start w-full mb-6 p-2">
           <div className="flex mt-2">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[cadetblue]  text-sm font-semibold mr-2 px-2.5 py-0.5 rounded">
                 To
               </span>
@@ -229,7 +262,7 @@ const TransactionsCard = ({
           </div>
 
           <div className="flex mt-2">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
                 From
               </span>
@@ -248,7 +281,7 @@ const TransactionsCard = ({
           </div>
 
           <div className="flex mt-5">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[cornflowerblue] text-sm font-semibold mr-2 px-2.5 py-0.5 rounded ">
                 Message
               </span>
@@ -265,7 +298,7 @@ const TransactionsCard = ({
           </div>
 
           <div className="flex mt-5">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
                 Keyword
               </span>
@@ -276,23 +309,23 @@ const TransactionsCard = ({
           </div>
 
           <div className="flex mt-5">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[firebrick] text-firebrick-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-firebrick-700 dark:text-firebrick-300">
                 Amount
               </span>
             </div>
-            <div className="text-white text-sm md:w-9/12">
+            <div className="text-white text-sm md:w-11/12">
               <p className="text-white text-base">{amount} Ethers</p>
             </div>
           </div>
 
           <div className="flex mt-5">
-            <div className="flex-initial w-40">
+            <div className="flex-initial w-64">
               <span className="bg-[cadetblue] text-cadetblue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cadetblue-700 dark:text-cadetblue-300">
                 Time
               </span>
             </div>
-            <div className="md:w-10/12">
+            <div className="w-64">
               <p className="text-white text-xs mt-2">{timestamp}</p>
             </div>
           </div>
