@@ -1,3 +1,5 @@
+var Web3 = require("web3");
+
 App = {
     web3Provider: null,
     contracts: {},
@@ -64,45 +66,45 @@ App = {
     },
 
     getMetaskAccountID: function () {
-        web3 = new Web3(App.web3Provider);
+        web3 = Web3;
 
         // Retrieving accounts
-        web3.eth.getAccounts(function(err, res) {
+        web3.eth.getAccounts(function (err, res) {
             if (err) {
-                console.log('Error:',err);
+                console.log('Error:', err);
                 return;
             }
 
             App.metamaskAccountID = res[0];
-            if (res.length > 1){
-            document.getElementById("divType").innerText = "Ganache Address"
-            console.log("Using Ganache");
-            App.FarmerID = res[1];
-            document.getElementById("farmerID").value = App.originFarmerID;
-            App.DistributorID = res[2];
-            document.getElementById("distributorID").value = App.DistributorID;
-            App.RetailerID = res[3];
-            document.getElementById("retailerID").value = App.RetailerID;
-            App.ConsumerID = res[4];
-            document.getElementById("consumerID").value = App.ConsumerID;
-          }else{
-            document.getElementById("divType").innerText = "Using MetaMask Address"
-            App.originFarmerID = document.getElementById("farmerID").value;
-            App.DistributorID = document.getElementById("distributorID").value;
-            App.RetailerID = document.getElementById("retailerID").value;
-            App.ConsumerID = document.getElementById("consumerID").value;
-          }
+            if (res.length > 1) {
+                document.getElementById("divType").innerText = "Ganache Address"
+                console.log("Using Ganache");
+                App.FarmerID = res[1];
+                document.getElementById("farmerID").value = App.originFarmerID;
+                App.DistributorID = res[2];
+                document.getElementById("distributorID").value = App.DistributorID;
+                App.RetailerID = res[3];
+                document.getElementById("retailerID").value = App.RetailerID;
+                App.ConsumerID = res[4];
+                document.getElementById("consumerID").value = App.ConsumerID;
+            } else {
+                document.getElementById("divType").innerText = "Using MetaMask Address"
+                App.originFarmerID = document.getElementById("farmerID").value;
+                App.DistributorID = document.getElementById("distributorID").value;
+                App.RetailerID = document.getElementById("retailerID").value;
+                App.ConsumerID = document.getElementById("consumerID").value;
+            }
 
         })
     },
 
     initSupplyChain: function () {
         /// Source the truffle compiled smart contracts
-        var jsonSupplyChain='../../build/contracts/SupplyChain.json';
+        var jsonSupplyChain = '../../build/contracts/SupplyChain.json';
         //var json
         /// JSONfy the smart contracts
-        $.getJSON(jsonSupplyChain, function(data) {
-            console.log('data',data);
+        $.getJSON(jsonSupplyChain, function (data) {
+            console.log('data', data);
             var SupplyChainArtifact = data;
             App.contracts.SupplyChain = TruffleContract(SupplyChainArtifact);
             App.contracts.SupplyChain.setProvider(App.web3Provider);
@@ -111,17 +113,17 @@ App = {
         return App.bindEvents();
     },
 
-    bindEvents: function() {
+    bindEvents: function () {
         $(document).on('click', App.handleButtonClick);
     },
 
-    handleButtonClick: async function(event) {
+    handleButtonClick: async function (event) {
         event.preventDefault();
         App.getMetaskAccountID();
         var processId = parseInt($(event.target).data('id'));
-        console.log('processId',processId);
+        console.log('processId', processId);
 
-        switch(processId) {
+        switch (processId) {
             case 1:
                 return await App.addFarmer(event);
                 break;
@@ -194,142 +196,142 @@ App = {
                 return await App.purchaseItemByConsumer(event);
                 break;
 
-            }
+        }
 
     },
     //1
-    addFarmer: function(event) {
+    addFarmer: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
         var resultTag = document.getElementById("isFarmer");
-        App.contracts.SupplyChain.deployed().then( async function(instance) {
+        App.contracts.SupplyChain.deployed().then(async function (instance) {
             resultTag.className = " loader";
             var checkRole = await instance.isFarmer(App.originFarmerID);
-            if (checkRole == false){
-              await instance.addFarmer(
-                  App.originFarmerID,
-                  {from: App.metamaskAccountID, gas:3000000}
-              );
+            if (checkRole == false) {
+                await instance.addFarmer(
+                    App.originFarmerID,
+                    { from: App.metamaskAccountID, gas: 3000000 }
+                );
             }
             sleep(1000);
             checkRole = await instance.isFarmer(App.originFarmerID);
             return checkRole;
-        }).then(function(result) {
+        }).then(function (result) {
             resultTag.className = " inputFeilds";
             resultTag.innerText = result;
-            if (result == true){
+            if (result == true) {
                 resultTag.style.color = "green"
-            }else{
+            } else {
                 resultTag.style.color = "red"
 
             }
-        }).catch(function(err) {
-          resultTag.className = " inputFeilds";
-          resultTag.innerText = "  Error: "+err.message;
+        }).catch(function (err) {
+            resultTag.className = " inputFeilds";
+            resultTag.innerText = "  Error: " + err.message;
 
         });
     },
     //2
-    addDistributor: function(event) {
+    addDistributor: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
         var resultTag = document.getElementById("isDistributor");
-        App.contracts.SupplyChain.deployed().then( async function(instance) {
+        App.contracts.SupplyChain.deployed().then(async function (instance) {
             resultTag.className = " loader";
             var checkRole = await instance.isDistributor(App.DistributorID);
-            if(checkRole == false){
-              await instance.addDistributor(App.DistributorID,
-                  {from: App.metamaskAccountID, gas:3000000}
+            if (checkRole == false) {
+                await instance.addDistributor(App.DistributorID,
+                    { from: App.metamaskAccountID, gas: 3000000 }
 
-              );
+                );
             }
             sleep(1000);
             checkRole = await instance.isDistributor(App.DistributorID);
             return checkRole
-        }).then(function(result) {
+        }).then(function (result) {
             resultTag.className = " inputFeilds";
             resultTag.innerText = result;
-            if (result == true){
+            if (result == true) {
                 resultTag.style.color = "green"
-            }else{
+            } else {
                 resultTag.style.color = "red"
 
             }
 
-        }).catch(function(err) {
-          resultTag.innerText = "  Error: "+err.message;
+        }).catch(function (err) {
+            resultTag.innerText = "  Error: " + err.message;
         });
     },
     //3
-    addRetailer: function(event) {
+    addRetailer: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
         var resultTag = document.getElementById("isRetailer");
-        App.contracts.SupplyChain.deployed().then(async function(instance) {
+        App.contracts.SupplyChain.deployed().then(async function (instance) {
             resultTag.className = " loader";
             var checkRole = await instance.isRetailer(App.RetailerID);
-            if (checkRole == false){
-              await instance.addRetailer(
-                  App.RetailerID,
-                  {from: App.metamaskAccountID, gas:3000000}
-              );
+            if (checkRole == false) {
+                await instance.addRetailer(
+                    App.RetailerID,
+                    { from: App.metamaskAccountID, gas: 3000000 }
+                );
             }
             sleep(1000);
             checkRole = await instance.isRetailer(App.RetailerID);
             return checkRole;
-        }).then(function(result) {
+        }).then(function (result) {
             resultTag.className = " inputFeilds";
             resultTag.innerText = result;
-            if (result == true){
+            if (result == true) {
                 resultTag.style.color = "green"
-            }else{
+            } else {
                 resultTag.style.color = "red"
             }
-        }).catch(function(err) {
-          resultTag.className = " inputFeilds";
-          resultTag.innerText = "  Error: "+err.message;
+        }).catch(function (err) {
+            resultTag.className = " inputFeilds";
+            resultTag.innerText = "  Error: " + err.message;
         });
     },
     //4
-    addConsumer: function(event) {
+    addConsumer: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
         var resultTag = document.getElementById("isConsumer");
-        App.contracts.SupplyChain.deployed().then(async function(instance) {
+        App.contracts.SupplyChain.deployed().then(async function (instance) {
             resultTag.className = " loader";
             var checkRole = await instance.isConsumer(App.ConsumerID);
-            if (checkRole == false){
-              await instance.addConsumer(
-                  App.ConsumerID,
-                  {from: App.metamaskAccountID, gas:3000000}
-              );
+            if (checkRole == false) {
+                await instance.addConsumer(
+                    App.ConsumerID,
+                    { from: App.metamaskAccountID, gas: 3000000 }
+                );
             }
             sleep(1000);
             checkRole = await instance.isConsumer(App.ConsumerID);
             return checkRole;
-        }).then(function(result) {
+        }).then(function (result) {
             resultTag.className = " inputFeilds";
             resultTag.innerText = result;
-            if (result == true){
+            if (result == true) {
                 resultTag.style.color = "green"
-            }else{
+            } else {
                 resultTag.style.color = "red"
             }
-        }).catch(function(err) {
-          resultTag.className = " inputFeilds";
-          resultTag.innerText = "  Error: "+err.message;
+        }).catch(function (err) {
+            resultTag.className = " inputFeilds";
+            resultTag.innerText = "  Error: " + err.message;
         });
     },
 
 
 
     //5
-    produceItemByFarmer: function(event) {
+    produceItemByFarmer: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
         var resultTag = document.getElementById("pr");
         var upc = $("#upc").val();
-        App.contracts.SupplyChain.deployed().then(function(instance) {
+        App.contracts.SupplyChain.deployed().then(function (instance) {
             resultTag.className = " loader";
             return instance.produceItemByFarmer(
                 upc,
@@ -339,14 +341,14 @@ App = {
                 App.originFarmLongitude,
                 App.productNotes,
                 App.productPrice,
-                {from: App.originFarmerID, gas:3000000}
+                { from: App.originFarmerID, gas: 3000000 }
             );
-        }).then(function(result) {
+        }).then(function (result) {
             resultTag.className = " font";
-            resultTag.innerText = "  Tx Hash: "+result.tx;
-        }).catch(function(err) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Error: "+err.message;
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
         });
     },
 
@@ -357,15 +359,15 @@ App = {
         var price = document.getElementById("sellprice").value;
         var upc = document.getElementById("sellupc").value;
         var resultTag = document.getElementById("srf");
-        App.contracts.SupplyChain.deployed().then(function(instance) {
+        App.contracts.SupplyChain.deployed().then(function (instance) {
             resultTag.className = " loader";
-            return instance.sellItemByFarmer(upc,price, {from: App.originFarmerID,gas:3000000});
-        }).then(function(result) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Tx Hash: "+result.tx;
-        }).catch(function(err) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Error: "+err.message;
+            return instance.sellItemByFarmer(upc, price, { from: App.originFarmerID, gas: 3000000 });
+        }).then(function (result) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
         });
     },
 
@@ -374,25 +376,25 @@ App = {
         var processId = parseInt($(event.target).data('id'));
         var upc = document.getElementById("purchaseupc").value;
         var resultTag = document.getElementById("pid");
-        App.contracts.SupplyChain.deployed().then(function(instance) {
+        App.contracts.SupplyChain.deployed().then(function (instance) {
             resultTag.className = " loader";
             return instance.fetchItemBufferTwo(upc);
-          }).then(function(result) {
+        }).then(function (result) {
             var price = result[4].c[0];
             var balance = window.web3.toWei(price, 'ether');
-            App.contracts.SupplyChain.deployed().then(function(instance) {
-              return instance.purchaseItemByDistributor(upc, {from: App.DistributorID, value:balance });
-            }).then(function(result) {
-              resultTag.className = " font";
-              resultTag.innerText = "  Tx Hash: "+result.tx;
-          }).catch(function(err) {
-              resultTag.className = " font";
-              resultTag.innerText = "  Error: "+err.message;
+            App.contracts.SupplyChain.deployed().then(function (instance) {
+                return instance.purchaseItemByDistributor(upc, { from: App.DistributorID, value: balance });
+            }).then(function (result) {
+                resultTag.className = " font";
+                resultTag.innerText = "  Tx Hash: " + result.tx;
+            }).catch(function (err) {
+                resultTag.className = " font";
+                resultTag.innerText = "  Error: " + err.message;
 
-          });
-        }).catch(function(err) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Error: "+err.message;
+            });
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
 
         });
 
@@ -400,159 +402,159 @@ App = {
 
 
     shippedItemByFarmer: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("shipupc").value;
-      var resultTag = document.getElementById("sibf");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.shippedItemByFarmer(upc, {from: App.FarmerID,gas:3000000});
-      }).then(function(result) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Tx Hash: "+result.tx;
-      }).catch(function(err) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Error: "+err.message;
-      });
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("shipupc").value;
+        var resultTag = document.getElementById("sibf");
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.shippedItemByFarmer(upc, { from: App.FarmerID, gas: 3000000 });
+        }).then(function (result) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
+        });
     },
 
     receivedItemByDistributor: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("receiveupc").value;
-      var resultTag = document.getElementById("ribd");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.receivedItemByDistributor(upc, {from: App.DistributorID});
-      }).then(function(result) {
-        resultTag.className = " font";
-        resultTag.innerText = "  Tx Hash: "+result.tx;
-      }).catch(function(err) {
-        resultTag.className = " font";
-        resultTag.innerText = "  Error: "+err.message;
-      });
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("receiveupc").value;
+        var resultTag = document.getElementById("ribd");
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.receivedItemByDistributor(upc, { from: App.DistributorID });
+        }).then(function (result) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
+        });
     },
 
     processedItemByDistributor: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("processupc").value;
-      var sliceNumber = document.getElementById("processnumber").value;
-      var resultTag = document.getElementById("pibd");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.processedItemByDistributor(upc,sliceNumber, {from: App.DistributorID});
-      }).then(function(result) {
-        resultTag.className = " font";
-        resultTag.innerText = "  Tx Hash: "+result.tx;
-      }).catch(function(err) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Error: "+err.message;
-      });
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("processupc").value;
+        var sliceNumber = document.getElementById("processnumber").value;
+        var resultTag = document.getElementById("pibd");
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.processedItemByDistributor(upc, sliceNumber, { from: App.DistributorID });
+        }).then(function (result) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
+        });
     },
 
     packageItemByDistributor: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("packageupc").value;
-      var resultTag = document.getElementById("paibd");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.packageItemByDistributor(upc, {from: App.DistributorID});
-      }).then(function(result) {
-        resultTag.className = " font";
-        resultTag.innerText = "  Tx Hash: "+result.tx;
-      }).catch(function(err) {
-        resultTag.className = " font";
-        resultTag.innerText = "  Error: "+err.message;
-      });
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("packageupc").value;
+        var resultTag = document.getElementById("paibd");
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.packageItemByDistributor(upc, { from: App.DistributorID });
+        }).then(function (result) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
+        });
     },
 
     sellItemByDistributor: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("sellupc").value;
-      var price = document.getElementById("sellprice").value;
-      var resultTag = document.getElementById("srd");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.sellItemByDistributor(upc,price ,{from: App.DistributorID});
-      }).then(function(result) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Tx Hash: "+result.tx;
-          console.log('sellItemByDistributor',result);
-      }).catch(function(err) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Error: "+err.message;
-          console.log(err.message);
-      });
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("sellupc").value;
+        var price = document.getElementById("sellprice").value;
+        var resultTag = document.getElementById("srd");
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.sellItemByDistributor(upc, price, { from: App.DistributorID });
+        }).then(function (result) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+            console.log('sellItemByDistributor', result);
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
+            console.log(err.message);
+        });
     },
 
     purchaseItemByRetailer: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("purchaseupc").value;
-      var resultTag = document.getElementById("pir");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.fetchItemBufferTwo(upc);
-        }).then(function(result) {
-          var price = result[4].c[0];
-          var balance = window.web3.toWei(price, 'ether');
-          App.contracts.SupplyChain.deployed().then(function(instance) {
-              return instance.purchaseItemByRetailer(upc, {from: App.RetailerID,value:balance,gas:3000000});
-          }).then(function(result) {
-              resultTag.className = " font";
-              resultTag.innerText = "  Tx Hash: "+result.tx;
-              console.log('purchaseItemByRetailer',result);
-          }).catch(function(err) {
-              resultTag.className = " font";
-              resultTag.innerText = "  Error: "+err.message;
-              console.log(err.message);
-          });
-        }).catch(function(err) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("purchaseupc").value;
+        var resultTag = document.getElementById("pir");
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.fetchItemBufferTwo(upc);
+        }).then(function (result) {
+            var price = result[4].c[0];
+            var balance = window.web3.toWei(price, 'ether');
+            App.contracts.SupplyChain.deployed().then(function (instance) {
+                return instance.purchaseItemByRetailer(upc, { from: App.RetailerID, value: balance, gas: 3000000 });
+            }).then(function (result) {
+                resultTag.className = " font";
+                resultTag.innerText = "  Tx Hash: " + result.tx;
+                console.log('purchaseItemByRetailer', result);
+            }).catch(function (err) {
+                resultTag.className = " font";
+                resultTag.innerText = "  Error: " + err.message;
+                console.log(err.message);
+            });
+        }).catch(function (err) {
             resultTag.className = " font";
-            resultTag.innerText = "  Error: "+err.message;
+            resultTag.innerText = "  Error: " + err.message;
             console.log(err.message);
         });
     },
 
     shippedItemByDistributor: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("shipupc").value;
-      var resultTag = document.getElementById("sibd");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.shippedItemByDistributor(upc, {from: App.DistributorID});
-      }).then(function(result) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Tx Hash: "+result.tx;
-          console.log('shippedItemByDistributor',result);
-      }).catch(function(err) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Error: "+err.message;
-          console.log(err.message);
-      });
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("shipupc").value;
+        var resultTag = document.getElementById("sibd");
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.shippedItemByDistributor(upc, { from: App.DistributorID });
+        }).then(function (result) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+            console.log('shippedItemByDistributor', result);
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
+            console.log(err.message);
+        });
     },
 
     receivedItemByRetailer: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("receiveupc").value;
-      var resultTag = document.getElementById("ribr");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.receivedItemByRetailer(upc, {from: App.RetailerID});
-      }).then(function(result) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Tx Hash: "+result.tx;
-          console.log('receivedItemByRetailer',result);
-      }).catch(function(err) {
-          resultTag.className = " font";
-          resultTag.innerText = "  Error: "+err.message;
-          console.log(err.message);
-      });
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("receiveupc").value;
+        var resultTag = document.getElementById("ribr");
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.receivedItemByRetailer(upc, { from: App.RetailerID });
+        }).then(function (result) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+            console.log('receivedItemByRetailer', result);
+        }).catch(function (err) {
+            resultTag.className = " font";
+            resultTag.innerText = "  Error: " + err.message;
+            console.log(err.message);
+        });
     },
     sellItemByRetailer: function (event) {
         event.preventDefault();
@@ -560,42 +562,42 @@ App = {
         var upc = document.getElementById("sellupc").value;
         var resultTag = document.getElementById("sibr");
         var price = document.getElementById("sellprice").value;
-        App.contracts.SupplyChain.deployed().then(function(instance) {
+        App.contracts.SupplyChain.deployed().then(function (instance) {
             resultTag.className = " loader";
-            return instance.sellItemByRetailer(upc,price, {from: App.RetailerID});
-        }).then(function(result) {
+            return instance.sellItemByRetailer(upc, price, { from: App.RetailerID });
+        }).then(function (result) {
             resultTag.className = " font";
-            resultTag.innerText = "  Tx Hash: "+result.tx;
-            console.log('sellItemByRetailer',result);
-        }).catch(function(err) {
+            resultTag.innerText = "  Tx Hash: " + result.tx;
+            console.log('sellItemByRetailer', result);
+        }).catch(function (err) {
             resultTag.className = " font";
-            resultTag.innerText = "  Error: "+err.message;
+            resultTag.innerText = "  Error: " + err.message;
             console.log(err.message);
         });
     },
     purchaseItemByConsumer: function (event) {
-      event.preventDefault();
-      var processId = parseInt($(event.target).data('id'));
-      var upc = document.getElementById("purchaseupc").value;
-      var resultTag = document.getElementById("pic")
-      App.contracts.SupplyChain.deployed().then(function(instance) {
-          resultTag.className = " loader";
-          return instance.fetchItemBufferTwo(upc);
-        }).then(function(result) {
-          var price = result[4].c[0];
-          var balance = window.web3.toWei(price, 'ether');
-          App.contracts.SupplyChain.deployed().then(function(instance) {
-              return instance.purchaseItemByConsumer(upc, {from: App.ConsumerID,value:balance,gas:3000000});
-          }).then(function(result) {
-              resultTag.className = " font";
-              resultTag.innerText = "  Tx Hash: "+result.tx;
-          }).catch(function(err) {
-              resultTag.className = " font";
-              resultTag.innerText = "  Error: "+err.message;
-          });
-        }).catch(function(err) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+        var upc = document.getElementById("purchaseupc").value;
+        var resultTag = document.getElementById("pic")
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            resultTag.className = " loader";
+            return instance.fetchItemBufferTwo(upc);
+        }).then(function (result) {
+            var price = result[4].c[0];
+            var balance = window.web3.toWei(price, 'ether');
+            App.contracts.SupplyChain.deployed().then(function (instance) {
+                return instance.purchaseItemByConsumer(upc, { from: App.ConsumerID, value: balance, gas: 3000000 });
+            }).then(function (result) {
+                resultTag.className = " font";
+                resultTag.innerText = "  Tx Hash: " + result.tx;
+            }).catch(function (err) {
+                resultTag.className = " font";
+                resultTag.innerText = "  Error: " + err.message;
+            });
+        }).catch(function (err) {
             resultTag.className = " font";
-            resultTag.innerText = "  Error: "+err.message;
+            resultTag.innerText = "  Error: " + err.message;
         });
     },
 
@@ -604,28 +606,28 @@ App = {
         var processId = parseInt($(event.target).data('id'));
         var displayTo = document.getElementById("BlockInfoBufferOne");
         var upc = $('#upc1').val();
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchItemBufferOne(upc);
-        }).then(function(result) {
-          while (displayTo.firstChild) {
-              displayTo.removeChild(displayTo.firstChild);
-          }
-          var myDate = new Date(result[8].c[0] *1000);
-          displayTo.innerHTML = (
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            return instance.fetchItemBufferOne(upc);
+        }).then(function (result) {
+            while (displayTo.firstChild) {
+                displayTo.removeChild(displayTo.firstChild);
+            }
+            var myDate = new Date(result[8].c[0] * 1000);
+            displayTo.innerHTML = (
 
-          "SKU: "+result[0]+"<br>"+
-          "UPC: "+result[1]+"<br>"+
-          "Owner ID: "+result[2]+"<br>"+
-          "Origin Farmer ID: "+result[3]+"<br>"+
-          "Origin Farm Name: "+result[4]+"<br>"+
-          "Origin Farm Information: "+result[5]+"<br>"+
-          "Origin Farm Latitude: "+result[6]+"<br>"+
-          "Origin Farm Longitude: "+result[7]+"<br>"+
-          "Product Date: "+myDate+"<br>"+
-          "Product Sliced: "+result[9]);
+                "SKU: " + result[0] + "<br>" +
+                "UPC: " + result[1] + "<br>" +
+                "Owner ID: " + result[2] + "<br>" +
+                "Origin Farmer ID: " + result[3] + "<br>" +
+                "Origin Farm Name: " + result[4] + "<br>" +
+                "Origin Farm Information: " + result[5] + "<br>" +
+                "Origin Farm Latitude: " + result[6] + "<br>" +
+                "Origin Farm Longitude: " + result[7] + "<br>" +
+                "Product Date: " + myDate + "<br>" +
+                "Product Sliced: " + result[9]);
 
-        }).catch(function(err) {
-          console.log(err.message);
+        }).catch(function (err) {
+            console.log(err.message);
         });
     },
 
@@ -634,28 +636,28 @@ App = {
         var processId = parseInt($(event.target).data('id'));
         var displayTo = document.getElementById("BlockInfoBufferOne");
         var upc = $('#upc1').val();
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchItemBufferTwo.call(upc,{from:App.metamaskAccountID,gas:3000000});
-        }).then(function(result) {
-          while (displayTo.firstChild) {
-              displayTo.removeChild(displayTo.firstChild);
-          }
+        App.contracts.SupplyChain.deployed().then(function (instance) {
+            return instance.fetchItemBufferTwo.call(upc, { from: App.metamaskAccountID, gas: 3000000 });
+        }).then(function (result) {
+            while (displayTo.firstChild) {
+                displayTo.removeChild(displayTo.firstChild);
+            }
 
-          var myDate = new Date(result[5].c[0] *1000);
+            var myDate = new Date(result[5].c[0] * 1000);
 
-          displayTo.innerHTML = (
-          "SKU: "+result[0]+"<br>"+
-          "UPC: "+result[1]+"<br>"+
-          "Product ID: "+result[2]+"<br>"+
-          "Product Notes: "+result[3]+"<br>"+
-          "Product Price: "+result[4]+"<br>"+
-          "Product Date: "+myDate+"<br>"+
-          "Item State: "+result[6]+"<br>"+
-          "Distributor ID: "+result[7]+"<br>"+
-          "Retailer ID: "+result[8]+"<br>"+
-          "Consumer ID: "+result[9]);
-        }).catch(function(err) {
-          console.log(err.message);
+            displayTo.innerHTML = (
+                "SKU: " + result[0] + "<br>" +
+                "UPC: " + result[1] + "<br>" +
+                "Product ID: " + result[2] + "<br>" +
+                "Product Notes: " + result[3] + "<br>" +
+                "Product Price: " + result[4] + "<br>" +
+                "Product Date: " + myDate + "<br>" +
+                "Item State: " + result[6] + "<br>" +
+                "Distributor ID: " + result[7] + "<br>" +
+                "Retailer ID: " + result[8] + "<br>" +
+                "Consumer ID: " + result[9]);
+        }).catch(function (err) {
+            console.log(err.message);
         });
     },
 
@@ -664,14 +666,14 @@ App = {
         var processId = parseInt($(event.target).data('id'));
         var upc = $('#upc1').val();
         var displayTo = document.getElementById("BlockInfoBufferOne");
-        App.contracts.SupplyChain.deployed().then(function(instance) {
+        App.contracts.SupplyChain.deployed().then(function (instance) {
             return instance.fetchitemHistory(upc);
-        }).then(function(result) {
-          displayTo.innerHTML = (
-          "Farmer To Distributor transaction at block "+result[0]+"<br>"+
-          "Distributor To Retailer transaction at block "+result[1]+"<br>"+
-          "Retailer To Comsumer transaction at block "+result[2]+"<br>");
-        }).catch(function(err) {
+        }).then(function (result) {
+            displayTo.innerHTML = (
+                "Farmer To Distributor transaction at block " + result[0] + "<br>" +
+                "Distributor To Retailer transaction at block " + result[1] + "<br>" +
+                "Retailer To Comsumer transaction at block " + result[2] + "<br>");
+        }).catch(function (err) {
             console.log(err.message);
         });
     },
@@ -685,5 +687,5 @@ $(function () {
 });
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
