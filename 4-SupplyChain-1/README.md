@@ -61,7 +61,7 @@
 
 ## Description
 Supply chain is always hard to manage and requires a lot of admistrative machinery. However, when managed with smart contracts using blockchain, a lot of the paperwork is reduced.
-Also it leads to an increase in the transparency and helps to build an efficient Root of Trust. Supply-chain-dapp is such an implementation of a supply chain management system which uses blockchain to ensure a transparent and secure transfer of product from the manufacturer to the customer via the online e-commerce websites. 
+Also it leads to an increase in transparency and helps to build an efficient Root of Trust. Spply-chain-dapp is such an implementation of a supply chian management system wich uses blockchain to ensure a transparent and secure transfer of product from the manufacturer to the customer via the online e-commerce websites. 
 ## Architecture
 The smart contract is being written with Solidity which is then compiled, migrated and deployed using Truffle.js on the local blockchain network created using Ganache-cli.The frontend uses Web3.js to communicate with the smart contract and local blockchain network and is written using React.js framework for better component and state lifecycle management.The requests from user are forwarded to frontend through Nginx(load balancer) and Express.js for dynamic routing.
 <p align="centre">  
@@ -74,9 +74,6 @@ The smart contract is being written with Solidity which is then compiled, migrat
 </p>
 
 ## Working
-<img src="https://user-images.githubusercontent.com/55195287/124394128-9646a600-dd1b-11eb-8bf1-233320762f1c.png" />
-<img src="https://user-images.githubusercontent.com/55195287/124394171-d4dc6080-dd1b-11eb-87b2-127daa32481a.png" />
-
 <p>
   The lifecycle of a product starts when <strong>manufactureProduct()</strong> is called(while making an entry) after the final product is manufactured and the product and manufacturer details are entered in the blockchain. The <strong>productHistory[]</strong> gets initialized and the current product data is stored with the current owner(manufacturer).
 </p>
@@ -98,7 +95,6 @@ The smart contract is being written with Solidity which is then compiled, migrat
 <p>
   The hashes(read certificates) are generated using the Solidity cryptographic function <strong>keccak256()</strong> which implements a SHA-3 hash in the blockchain setup. <strong>keccak256()</strong> generates a secure 256-bit hash which is the main basis of security in the entire mainnet apart from the smart contracts being immutable. In our supply chain setup certificates are generated at every stage of shipping of the product. 
 </p>
-
 
 ## Contract Diagrams
 ### Activity Diagram
@@ -145,10 +141,6 @@ ganache-cli --accounts 10 --gasLimit 6721975000
 If you want to run the ganache-cli on docker then use the following command
 ```Bash
 sudo docker run -d -p 8545:8545 trufflesuite/ganache-cli:latest -h 0.0.0.0 --accounts 10 --gasLimit 6721975000
-```
-Migrate the contracts
-```Bash
-truffle migrate --network=develop --reset
 ```
 Open a second terminal and enter the client folder
 ```Bash

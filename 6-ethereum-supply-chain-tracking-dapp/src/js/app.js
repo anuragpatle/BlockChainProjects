@@ -1,5 +1,3 @@
-var w3 = require("web3");
-
 App = {
     web3Provider: null,
     contracts: {},
@@ -76,7 +74,7 @@ App = {
         }
         // If no injected web3 instance is detected, fall back to Ganache
         else {
-            App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
+            App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
         }
 
         App.getMetaskAccountID();
@@ -85,10 +83,10 @@ App = {
     },
 
     getMetaskAccountID: function () {
-        web3 = w3;
-
+        // web3 = new Web3(App.web3Provider);
+        web3 = window.web3.currentProvider;
         // Retrieving accounts
-        eth.getAccounts(function (err, res) {
+        web3.eth.getAccounts(function (err, res) {
             if (err) {
                 console.log('Error:', err);
                 return;
@@ -220,7 +218,7 @@ App = {
         var processId = parseInt($(event.target).data('id'));
 
         App.contracts.SupplyChain.deployed().then(function (instance) {
-            const productPrice = toWei(1, "ether");
+            const productPrice = web3.toWei(1, "ether");
             console.log('productPrice', productPrice);
             return instance.sellItem(App.upc, App.productPrice, { from: App.metamaskAccountID });
         }).then(function (result) {
@@ -236,7 +234,7 @@ App = {
         var processId = parseInt($(event.target).data('id'));
 
         App.contracts.SupplyChain.deployed().then(function (instance) {
-            const walletValue = toWei(3, "ether");
+            const walletValue = web3.toWei(3, "ether");
             return instance.buyItem(App.upc, { from: App.metamaskAccountID, value: walletValue });
         }).then(function (result) {
             $("#ftc-item").text(result);

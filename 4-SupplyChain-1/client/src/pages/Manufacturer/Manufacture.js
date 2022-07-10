@@ -39,25 +39,25 @@ export default function Manufacture(props) {
 
     const handleSubmitManufacturerForm = async () => {
         setLoading(true);
-
+        
         if (manuForm.manufacturerName !== "" && manuForm.manufacturerDetails !== "" && manuForm.manufacturerLongitude !== "" && manuForm.manufacturerLatitude !== "" && manuForm.productName !== "" && manuForm.productCode !== 0 && manuForm.productPrice !== 0 && manuForm.productCategory !== "") {
             setfvalid(false);
-            await supplyChainContract.methods.manufactureProduct(manuForm.manufacturerName, manuForm.manufacturerDetails, manuForm.manufacturerLongitude, manuForm.manufacturerLatitude, manuForm.productName, parseInt(manuForm.productCode), parseInt(manuForm.productPrice), manuForm.productCategory).send({ from: roles.manufacturer, gas: 21000 })
+            await supplyChainContract.methods.manufactureProduct(manuForm.manufacturerName, manuForm.manufacturerDetails, manuForm.manufacturerLongitude, manuForm.manufacturerLatitude, manuForm.productName, parseInt(manuForm.productCode), parseInt(manuForm.productPrice), manuForm.productCategory).send({ from: roles.manufacturer, gas: 999999 })
                 // .then(console.log)
                 .on('transactionHash', function (hash) {
                     handleSetTxhash(hash);
                 });
-            setManuForm({
-                id: 0,
-                manufacturerName: "",
-                manufacturerDetails: "",
-                manufacturerLongitude: "",
-                manufacturerLatitude: "",
-                productName: "",
-                productCode: 0,
-                productPrice: 0,
-                productCategory: "",
-            })
+                setManuForm({
+                    id: 0,
+                    manufacturerName: "",
+                    manufacturerDetails: "",
+                    manufacturerLongitude: "",
+                    manufacturerLatitude: "",
+                    productName: "",
+                    productCode: 0,
+                    productPrice: 0,
+                    productCategory: "",
+                })
         } else {
             setfvalid(true);
         }
@@ -67,7 +67,7 @@ export default function Manufacture(props) {
     const handleSetTxhash = async (hash) => {
         await supplyChainContract.methods
             .setTransactionHashOnManufacture(hash)
-            .send({ from: roles.manufacturer, gas: 21000 });
+            .send({ from: roles.manufacturer, gas: 900000 });
     };
 
     const createProduct = async () => {
@@ -84,7 +84,7 @@ export default function Manufacture(props) {
                     12000,
                     "electronics"
                 )
-                .send({ from: roles.manufacturer, gas: 21000 })
+                .send({ from: roles.manufacturer, gas: 999999 })
                 .on("transactionHash", function (hash) {
                     handleSetTxhash(hash);
                 });
@@ -200,7 +200,7 @@ export default function Manufacture(props) {
                                 onClick={handleSubmitManufacturerForm}
                             >
                                 SUBMIT
-                            </Button>
+              </Button>
 
                             <br />
                             <br />
