@@ -16,10 +16,10 @@ const main = async () => {
   // We get the contract to deploy
   const Transactions = await hre.ethers.getContractFactory("Transactions");
   const transactions = await Transactions.deploy();
-
   await transactions.deployed();
-
   console.log("Greeter deployed to:", transactions.address);
+
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
