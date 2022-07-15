@@ -87,3 +87,10 @@ COMPLETE  (ONLY WHEN deliveryStatus == REACHED), PENDING_PAYMENT (ONLY WHEN deli
 3. deliveryFailureReason -> TEMPERATURE_CROSSED_CRITICAL_VALUE, CUSTOMER_REJECTED
 
 
+# ------------------------------------------------------
+# 4. Testing the app
+
+```
+npx hardhat test --network ganache
+```
+

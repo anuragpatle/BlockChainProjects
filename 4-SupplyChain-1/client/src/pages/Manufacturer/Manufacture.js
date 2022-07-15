@@ -39,25 +39,31 @@ export default function Manufacture(props) {
 
     const handleSubmitManufacturerForm = async () => {
         setLoading(true);
-        
-        if (manuForm.manufacturerName !== "" && manuForm.manufacturerDetails !== "" && manuForm.manufacturerLongitude !== "" && manuForm.manufacturerLatitude !== "" && manuForm.productName !== "" && manuForm.productCode !== 0 && manuForm.productPrice !== 0 && manuForm.productCategory !== "") {
+
+        if (manuForm.manufacturerName !== "" && manuForm.manufacturerDetails !== ""
+            && manuForm.manufacturerLongitude !== "" && manuForm.manufacturerLatitude !== ""
+            && manuForm.productName !== "" && manuForm.productCode !== 0
+            && manuForm.productPrice !== 0 && manuForm.productCategory !== "") {
             setfvalid(false);
-            await supplyChainContract.methods.manufactureProduct(manuForm.manufacturerName, manuForm.manufacturerDetails, manuForm.manufacturerLongitude, manuForm.manufacturerLatitude, manuForm.productName, parseInt(manuForm.productCode), parseInt(manuForm.productPrice), manuForm.productCategory).send({ from: roles.manufacturer, gas: 999999 })
+            await supplyChainContract.methods.manufactureProduct(manuForm.manufacturerName,
+                manuForm.manufacturerDetails, manuForm.manufacturerLongitude, manuForm.manufacturerLatitude,
+                manuForm.productName, parseInt(manuForm.productCode), parseInt(manuForm.productPrice),
+                manuForm.productCategory).send({ from: roles.manufacturer, gas: 999999 })
                 // .then(console.log)
                 .on('transactionHash', function (hash) {
                     handleSetTxhash(hash);
                 });
-                setManuForm({
-                    id: 0,
-                    manufacturerName: "",
-                    manufacturerDetails: "",
-                    manufacturerLongitude: "",
-                    manufacturerLatitude: "",
-                    productName: "",
-                    productCode: 0,
-                    productPrice: 0,
-                    productCategory: "",
-                })
+            setManuForm({
+                id: 0,
+                manufacturerName: "",
+                manufacturerDetails: "",
+                manufacturerLongitude: "",
+                manufacturerLatitude: "",
+                productName: "",
+                productCode: 0,
+                productPrice: 0,
+                productCategory: "",
+            })
         } else {
             setfvalid(true);
         }
@@ -70,27 +76,27 @@ export default function Manufacture(props) {
             .send({ from: roles.manufacturer, gas: 900000 });
     };
 
-    const createProduct = async () => {
-        setLoading(true);
-        for (var i = 0; i < 5; i++) {
-            await supplyChainContract.methods
-                .manufactureProduct(
-                    "product" + i,
-                    "manufacturer" + 1,
-                    "98",
-                    "89",
-                    "mi" + i,
-                    99 + i,
-                    12000,
-                    "electronics"
-                )
-                .send({ from: roles.manufacturer, gas: 999999 })
-                .on("transactionHash", function (hash) {
-                    handleSetTxhash(hash);
-                });
-        }
-        setLoading(false);
-    };
+    // const createProduct = async () => {
+    //     setLoading(true);
+    //     for (var i = 0; i < 5; i++) {
+    //         await supplyChainContract.methods
+    //             .manufactureProduct(
+    //                 "product" + i,
+    //                 "manufacturer" + 1,
+    //                 "98",
+    //                 "89",
+    //                 "mi" + i,
+    //                 99 + i,
+    //                 12000,
+    //                 "electronics"
+    //             )
+    //             .send({ from: roles.manufacturer, gas: 999999 })
+    //             .on("transactionHash", function (hash) {
+    //                 handleSetTxhash(hash);
+    //             });
+    //     }
+    //     setLoading(false);
+    // };
 
     return (
         <>
@@ -200,7 +206,7 @@ export default function Manufacture(props) {
                                 onClick={handleSubmitManufacturerForm}
                             >
                                 SUBMIT
-              </Button>
+                            </Button>
 
                             <br />
                             <br />
