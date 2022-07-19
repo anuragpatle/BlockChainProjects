@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import { contractABI, contractAddress } from "../utils/constants";
+import { TransactionsContractABI, TransactionsContractAddress } from "../utils/constants";
 
 // Get ethereum object from the metamask browser addon
 // Since we are using metamask wallet extention/addon on the browser, we have access to ethereum object.
@@ -15,8 +15,8 @@ const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
   const transactionContract = new ethers.Contract(
-    contractAddress,
-    contractABI,
+    TransactionsContractAddress,
+    TransactionsContractABI,
     signer
   );
 

@@ -3,7 +3,7 @@ pragma solidity >=0.4.21 <0.9.0;
 
 import "./SupplyChain.sol";
 
-contract SupplyChainStep5 is SupplyChain {
+contract SupplyChainStep7 is SupplyChain {
     ///@dev STEP 8 : Receiveing of product by delivery hub purchased by customer.
     function receiveByDeliveryHub(
         uint256 _uid,

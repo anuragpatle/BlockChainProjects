@@ -3,7 +3,7 @@ pragma solidity >=0.4.21 <0.9.0;
 
 import "./SupplyChain.sol";
 
-contract SupplyChainStep5 is SupplyChain {
+contract SupplyChainStep8 is SupplyChain {
     ///@dev STEP 7 : Shipping of product by third party purchased by customer.
     function shipByThirdParty(uint256 _uid)
         public
