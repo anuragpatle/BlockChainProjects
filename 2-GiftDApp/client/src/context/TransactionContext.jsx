@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import { TransactionsContractABI, TransactionsContractAddress } from "../utils/constants";
+import {transactionsContract} from "../utils/getSmartConrtacts"
+
 
 // Get ethereum object from the metamask browser addon
 // Since we are using metamask wallet extention/addon on the browser, we have access to ethereum object.
@@ -11,18 +12,20 @@ const { ethereum } = window;
 const ordersUrl = "http://localhost:5000/orders";
 
 
+
 const getEthereumContract = () => {
-  const provider = new ethers.providers.Web3Provider(ethereum);
-  const signer = provider.getSigner();
-  const transactionContract = new ethers.Contract(
-    TransactionsContractAddress,
-    TransactionsContractABI,
-    signer
-  );
+  // const provider = new ethers.providers.Web3Provider(ethereum);
+  // const signer = provider.getSigner();
+  // const transactionContract = new ethers.Contract(
+  //   transactionContractAddress,
+  //   transactionsAbi,
+  //   signer
+  // );
 
-  console.log({ provider, signer, transactionContract });
 
-  return transactionContract;
+  // return transactionContract;
+  console.log({ transactionsContract });
+  return transactionsContract;
 };
 
 export const TransactionProvider = ({ children }) => {
@@ -368,7 +371,7 @@ export const TransactionProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       setIsLoading(false);
-      throw new Error("No ethereum object.");
+      throw new Error("Exception in sendTransactionForDispatchedOrders");
     }
   };
 

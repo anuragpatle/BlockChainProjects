@@ -1,7 +1,5 @@
 import React from 'react';
-import { createContext, useState } from "react";
-
-const RoleDataContext = createContext(null);
+import { useState } from "react";
 
 export const RoleDataContextProvider = ({ mRole, tpRole, dhRole, cRole, children }) => {
 
@@ -19,4 +17,5 @@ export const RoleDataContextProvider = ({ mRole, tpRole, dhRole, cRole, children
   );
 };
 
-export const useRole = () => React.useContext(RoleDataContext);
+// export const useRole = () => React.useContext(RoleDataContext);
+export const RoleDataContext = React.createContext();

@@ -88,8 +88,6 @@ const main = async () => {
   console.log("SupplyChainStep9 deployed to:", supplyChainStep9.address);
   saveFrontendFiles(supplyChainStep9, "SupplyChainStep9");
 
-
-
 }
 let contractAddressObj = {};
 const saveFrontendFiles = (_contract, contractName) => {
