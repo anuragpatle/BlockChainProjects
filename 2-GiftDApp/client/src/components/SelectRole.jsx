@@ -6,6 +6,7 @@ const companyCommonStyles =
 
 const SelectRole = () => {
   return (
+
     <div className="flex w-full justify-center items-center">
       <Link className={`rounded ${companyCommonStyles}`} to="/roleAdmin" style={{ textDecoration: "none", color: "#fff" }}>
         <Button>Assign Roles</Button>
