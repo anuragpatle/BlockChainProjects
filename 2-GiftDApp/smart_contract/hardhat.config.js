@@ -41,7 +41,7 @@ module.exports = {
     },
     ganache: {
       url: "http://127.0.0.1:7545",
-      accounts: ['bdd822d73e2c7b4b5cf987698635a5ce7ac8ce0f281ee6f85ddca7d6b4ca8d02', 'f9ac293c3273cce67f7aa52a3b4015c66bf26ec5dad235eafe9f1cf5b61dfecc']
+      accounts: ['795504a4ef6ba797e1ce5dde67095e1c2cd20a1fd7aee8c99c3e610370298919', '1463a71fe97e5be0211b0eb3ca658ad18ab809e6edc59b75790579f0f757168f']
     }
   }
 };
