@@ -6,27 +6,28 @@ import { Routes, Route, Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 
 const NavBarItem = ({ title, classprops }) => (
-  <li className={`mx-4 cursor-pointer ${classprops}`}>{title}</li>
+  <li className={`px-10 cursor-pointer ${classprops}`}>{title}</li>
 );
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = React.useState(false);
 
   return (
-    <nav className="w-full flex justify-between items-center p-4 border-x-0  border-t-0  border-b-2   rounded-lg  w-full rounded-sm p-2 outline-none bg-transparent text-white  text-sm white-glassmorphism">
-      <div className="md:flex-[0.5] flex-initial justify-center items-center">
-        <img src={logo} alt="logo" className="w-64 cursor-pointer" />
+    <nav className="w-full flex  flex-row border-x-0 items-center  border-t-0  border-b-2   rounded-lg  rounded-sm p-2 outline-none bg-transparent text-white  text-sm white-glassmorphism">
+      <div className=" w-1/4">
+        <Link to="/">
+          <img src={logo} alt="logo" className="w-64 cursor-pointer ml-10" />
+        </Link>
       </div>
 
-      <div className="md:flex-[0.4] flex-initial mt-1">
-        <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
-          {["Market", "Contact Us", "About", "Help"].map((item, index) => (
-            <NavBarItem key={item + index} title={item} />
-          ))}
-          {/* <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
-          <Link to="/ConfirmDelivery">ConfirmDelivery</Link>
-        </li> */}
-        </ul>
+      <div className=" w-3/4 flex-row-reverse">
+        <div className=" mt-1  flex  flex-row-reverse">
+          <ul className="text-white md:flex hidden list-none flex-row  items-center flex-initial">
+            {["Contact Us", "About", "Help"].map((item, index) => (
+              <NavBarItem key={item + index} title={item} />
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="flex relative">
@@ -44,7 +45,7 @@ const Navbar = () => {
             onClick={() => setToggleMenu(false)}
           />
         )}
-        {toggleMenu && (
+        {true && (
           <ul
             className="z-10 fixed -top-0 -right-2 p-3 w-[70vw] h-screen shadow-2xl md:hidden list-none
             flex flex-col justify-start items-end rounded-md blue-glassmorphism text-white animate-slide-in"
@@ -52,15 +53,13 @@ const Navbar = () => {
             <li className="text-xl w-full my-2">
               <AiOutlineClose onClick={() => setToggleMenu(false)} />
             </li>
-            {["Market", "Exchange", "Tutorials", "Wallets"].map(
-              (item, index) => (
-                <NavBarItem
-                  key={item + index}
-                  title={item}
-                  classprops="my-2 text-lg"
-                />
-              )
-            )}
+            {["Exchange", "Tutorials", "Wallets"].map((item, index) => (
+              <NavBarItem
+                key={item + index}
+                title={item}
+                classprops="my-2 text-lg"
+              />
+            ))}
           </ul>
         )}
       </div>
