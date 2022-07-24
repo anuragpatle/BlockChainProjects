@@ -3,6 +3,7 @@ import { RoleDataContext } from "../context/RoleDataContext";
 import { TextField, Button, Box } from "@mui/material";
 import supplyChainContract from "../utils/getSmartConrtacts";
 import { TransactionContext } from "../context/TransactionContext";
+import { adminAddress } from "../utils/constants";
 
 const { ethereum } = window;
 const ariaLabel = { "aria-label": "description" };
@@ -31,12 +32,13 @@ const RoleAdmin = () => {
   const [customerRole, setCustomerRole] = React.useState("");
   const { roles, setRoles } = useContext(RoleDataContext);
   const { isLoading } = useContext(TransactionContext);
+  const { currentAccount } = useContext(TransactionContext);
 
   const handleAddRoles = async () => {
-	handleAddManufacturerRole();
-	handleAddThirdPartyRole();
-	handleAddDeliveryHubRole();
-	handleAddCustomerRole();
+    handleAddManufacturerRole();
+    handleAddThirdPartyRole();
+    handleAddDeliveryHubRole();
+    handleAddCustomerRole();
   };
 
   const handleAddManufacturerRole = async () => {
@@ -48,9 +50,8 @@ const RoleAdmin = () => {
     // console.log("supplyChainContract ---- ")
     // console.log({supplyChainContract})
 
-
-    console.log("manf:  : : ")
-    console.log({manufacturerRole})
+    console.log("manf:  : : ");
+    console.log({ manufacturerRole });
 
     localStorage.setItem("mRole", manufacturerRole);
     await supplyChainContract.supplyChainContract
@@ -67,15 +68,13 @@ const RoleAdmin = () => {
       thirdparty: thirdPartyRole,
     });
 
-
-
-    console.log("thirdPartyRole:  : : ")
-    console.log({thirdPartyRole})
+    console.log("thirdPartyRole:  : : ");
+    console.log({ thirdPartyRole });
 
     localStorage.setItem("tpRole", thirdPartyRole);
     await supplyChainContract.supplyChainContract
       .addThirdPartyRole(thirdPartyRole)
-    //   .send({ from: accounts[0], gas: 100000 })
+      //   .send({ from: accounts[0], gas: 100000 })
       .then(console.log);
 
     setThirdPartyRole("");
@@ -90,7 +89,7 @@ const RoleAdmin = () => {
     localStorage.setItem("dhRole", deliveryHubRole);
     await supplyChainContract.supplyChainContract
       .addDeliveryHubRole(deliveryHubRole)
-    //   .send({ from: accounts[0], gas: 100000 })
+      //   .send({ from: accounts[0], gas: 100000 })
       .then(console.log);
 
     setDeliveryHubRole("");
@@ -105,7 +104,7 @@ const RoleAdmin = () => {
     localStorage.setItem("cRole", customerRole);
     await supplyChainContract.supplyChainContract
       .addCustomerRole(customerRole)
-    //   .send({ from: accounts[0], gas: 100000 })
+      //   .send({ from: accounts[0], gas: 100000 })
       .then(console.log);
 
     setCustomerRole("");
@@ -120,104 +119,125 @@ const RoleAdmin = () => {
         </h1>
         <p className="mt-10 text-left my-2 text-white font-light md:w-9/12 w-11/12 text-base"></p>
       </div>
-      <div className=" border-2 border-amber-900 p-5 w-3/3 flex flex-col items-center blue-glassmorphism">
-        <div className="mt-2 flex flex-col items-center w-full ">
-          <div className="display-flex justify-start w-full mb-2">
-            <div className="flex ">
-              <div className="w-2/12 flex-initial mt-2 mr-1">
-                <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
-                  Manufacturer
+
+      {currentAccount === adminAddress ? (
+        <div className=" border-2 border-amber-900 p-5 w-3/3 flex flex-col items-center blue-glassmorphism">
+          <div className="mt-2 flex flex-col items-center w-full ">
+            <div className="display-flex justify-start w-full mb-2">
+              <div className="flex ">
+                <div className="w-2/12 flex-initial mt-2 mr-1">
+                  <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
+                    Manufacturer
+                  </div>
                 </div>
-              </div>
-              <div className="text-white text-sm w-10/12">
-                <Input
-                  placeholder="Address: 0xB59e.."
-                  name="addressTo"
-                  type="text"
-                  handleChange={(e) => {
-                    setManufacturerRole(e.target.value)
-                    console.log("e: " + manufacturerRole)
-                  }}
-                />
+                <div className="text-white text-sm w-10/12">
+                  <Input
+                    placeholder="Address: 0xB59e.."
+                    name="addressTo"
+                    type="text"
+                    handleChange={(e) => {
+                      setManufacturerRole(e.target.value);
+                      console.log("e: " + manufacturerRole);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-2 flex flex-col items-center w-full ">
-          <div className="display-flex justify-start w-full mb-2">
-            <div className="flex ">
-              <div className="w-2/12 flex-initial mt-2 mr-1">
-                <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
-                  Third Party
+          <div className="mt-2 flex flex-col items-center w-full ">
+            <div className="display-flex justify-start w-full mb-2">
+              <div className="flex ">
+                <div className="w-2/12 flex-initial mt-2 mr-1">
+                  <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
+                    Third Party
+                  </div>
                 </div>
-              </div>
-              <div className="text-white text-sm w-10/12">
-                <Input
-                  placeholder="Address: 0xB59e.."
-                  name="addressTo"
-                  type="text"
-                  handleChange={(e) => setThirdPartyRole(e.target.value)}
-                />
+                <div className="text-white text-sm w-10/12">
+                  <Input
+                    placeholder="Address: 0xB59e.."
+                    name="addressTo"
+                    type="text"
+                    handleChange={(e) => setThirdPartyRole(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-2 flex flex-col items-center w-full ">
-          <div className="display-flex justify-start w-full mb-2">
-            <div className="flex ">
-              <div className="w-2/12 flex-initial mt-2 mr-1">
-                <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
-                  Delivery Hub
+          <div className="mt-2 flex flex-col items-center w-full ">
+            <div className="display-flex justify-start w-full mb-2">
+              <div className="flex ">
+                <div className="w-2/12 flex-initial mt-2 mr-1">
+                  <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
+                    Delivery Hub
+                  </div>
                 </div>
-              </div>
-              <div className="text-white text-sm w-10/12">
-                <Input
-                  placeholder="Address: 0xB59e.."
-                  name="addressTo"
-                  type="text"
-                  handleChange={(e) => setDeliveryHubRole(e.target.value)}
-                />
+                <div className="text-white text-sm w-10/12">
+                  <Input
+                    placeholder="Address: 0xB59e.."
+                    name="addressTo"
+                    type="text"
+                    handleChange={(e) => setDeliveryHubRole(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-2 flex flex-col items-center w-full ">
-          <div className="display-flex justify-start w-full mb-2">
-            <div className="flex ">
-              <div className="w-2/12 flex-initial mt-2 mr-1">
-                <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
-                  Customer
+          <div className="mt-2 flex flex-col items-center w-full ">
+            <div className="display-flex justify-start w-full mb-2">
+              <div className="flex ">
+                <div className="w-2/12 flex-initial mt-2 mr-1">
+                  <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
+                    Customer
+                  </div>
                 </div>
-              </div>
-              <div className="text-white text-sm w-10/12">
-                <Input
-                  placeholder="Address: 0xB59e.."
-                  name="addressTo"
-                  type="text"
-                  handleChange={(e) => setCustomerRole(e.target.value)}
-                />
+                <div className="text-white text-sm w-10/12">
+                  <Input
+                    placeholder="Address: 0xB59e.."
+                    name="addressTo"
+                    type="text"
+                    handleChange={(e) => setCustomerRole(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
           </div>
+
+          <div className="h-[1px] w-full bg-gray-400 my-2" />
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <button
+              type="button"
+              onClick={handleAddRoles}
+              className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#a40ea4] rounded-full cursor-pointer"
+            >
+              Submit
+            </button>
+          )}
         </div>
+      ) : (
+        <div className=" border-2 border-amber-900 p-5 w-3/3 flex flex-col items-center blue-glassmorphism">
+          <div className="mt-2 flex flex-col items-center w-full ">
+            <div className="display-flex  w-full mb-2">
+              <div className="flex ">
+                <div className="w-12/12 flex mt-2 mr-1">
+                  <div className="bg-[#2e3150] text-[#92b4b5] text-sm font-semibold mr-2 px-2.5 py-1 rounded">
+                    Sorry, you can not proceed as you are not an admin!
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
 
 
-        <div className="h-[1px] w-full bg-gray-400 my-2" />
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <button
-            type="button"
-            onClick={handleAddRoles}
-            className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
-          >
-            Submit
-          </button>
-        )}
-      </div>
+
+
+        </div>
+      )}
     </div>
   );
 };
