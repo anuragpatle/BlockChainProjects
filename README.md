@@ -1,2 +1,2 @@
-# EThereumTruffleExample
+# All blockchain projects
 
