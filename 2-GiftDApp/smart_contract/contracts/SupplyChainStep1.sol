@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: TSIN
-pragma solidity >=0.4.21 <0.9.0;
+pragma solidity ^0.8.0;
 
 import "./SupplyChain.sol";
 
-contract SupplyChainStep1  is SupplyChain {
+contract SupplyChainStep1 is SupplyChain {
+    event CalledManufactureProduct(string str);
 
-	  ///@dev STEP 1 : Manufactured a product.
+    //@dev STEP 1 : Manufactured a product.
     function manufactureProduct(
         string memory manufacturerName,
         string memory manufacturerDetails,
@@ -15,8 +16,12 @@ contract SupplyChainStep1  is SupplyChain {
         uint256 productCode,
         uint256 productPrice,
         string memory productCategory
-    ) public {
-        require(hasManufacturerRole(msg.sender));
+    ) public override {
+        emit CalledManufactureProduct("My message to see msg.sender");
+        require(
+            hasManufacturerRole(msg.sender),
+            "Does not have manufacturer role."
+        );
         uint256 _uid = uid;
         Structure.Product memory product;
         product.sku = sku;
@@ -51,7 +56,4 @@ contract SupplyChainStep1  is SupplyChain {
 
         emit Manufactured(_uid);
     }
-
 }
-
-

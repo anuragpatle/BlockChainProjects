@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { RoleDataContext } from "../context/RoleDataContext";
-import { TextField, Button, Box } from "@mui/material";
 import supplyChainContract from "../utils/getSmartConrtacts";
 import { TransactionContext } from "../context/TransactionContext";
 import { adminAddress } from "../utils/constants";
@@ -36,9 +35,9 @@ const RoleAdmin = () => {
 
   const handleAddRoles = async () => {
     handleAddManufacturerRole();
-    handleAddThirdPartyRole();
-    handleAddDeliveryHubRole();
-    handleAddCustomerRole();
+    // handleAddThirdPartyRole();
+    // handleAddDeliveryHubRole();
+    // handleAddCustomerRole();
   };
 
   const handleAddManufacturerRole = async () => {

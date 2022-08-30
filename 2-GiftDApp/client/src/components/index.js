@@ -7,3 +7,6 @@ export { default as Welcome } from './Welcome';
 export { default as ConfirmDelivery } from './ConfirmDelivery';
 export { default as DispatchForm } from './DispatchForm';
 export { default as MessageModal } from './MessageModal';
+export { default as Manufature } from './Manufacturer/Manufacture';
+export { default as RoleAdmin } from './RoleAdmin';
+export { default as SelectRole } from './SelectRole';

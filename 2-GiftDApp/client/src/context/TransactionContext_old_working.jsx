@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import { transactionsContract } from "../utils/getSmartConrtacts";
+import {transactionsContract} from "../utils/getSmartConrtacts"
+
 
 // Get ethereum object from the metamask browser addon
 // Since we are using metamask wallet extention/addon on the browser, we have access to ethereum object.
@@ -9,6 +10,8 @@ import { transactionsContract } from "../utils/getSmartConrtacts";
 const { ethereum } = window;
 
 const ordersUrl = "http://localhost:5000/orders";
+
+
 
 const getEthereumContract = () => {
   // const provider = new ethers.providers.Web3Provider(ethereum);
@@ -18,6 +21,7 @@ const getEthereumContract = () => {
   //   transactionsAbi,
   //   signer
   // );
+
 
   // return transactionContract;
   console.log({ transactionsContract });
@@ -46,7 +50,7 @@ export const TransactionProvider = ({ children }) => {
 
   const callSetSthNetworkStoredData = (data) => {
     setSthNetworkStoredData(data);
-  };
+  }
 
   const handleMsgModalOpen = () => {
     setMsgModalOpen(true);
@@ -105,48 +109,28 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
-  React.useEffect(function setupListener() {
-    // Reload on Metamask account change.
-    if (!window.ethereum) {
-      return;
-    }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch(ordersUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          // setPendingOrders([...data]);
+          setPendingOrders(
+            data.filter((data) => {
+              if (
+                (data.transactionStatus === "NOT_INITIATED" ||
+                  data.transactionStatus === "PENDING_PAYMENT" ||
+                  data.transactionStatus === "INITIATED" )
+              ) {
+                return true;
+              }
+            })
+          );
+        });
+    }, 1000);
 
-    let handleAccountsChanged = () => {
-      window.location.reload();
-    };
-
-    // window.ethereum.on("chainChanged", () => {
-    //   window.location.reload();
-    // });
-    window.ethereum.on("accountsChanged", handleAccountsChanged);
-    return function cleanupListener() {
-      window.removeEventListener("accountsChanged", handleAccountsChanged);
-    };
-  });
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     fetch(ordersUrl)
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         // setPendingOrders([...data]);
-  //         setPendingOrders(
-  //           data.filter((data) => {
-  //             if (
-  //               (data.transactionStatus === "NOT_INITIATED" ||
-  //                 data.transactionStatus === "PENDING_PAYMENT" ||
-  //                 data.transactionStatus === "INITIATED" )
-  //             ) {
-  //               return true;
-  //             }
-  //           })
-  //         );
-  //       });
-
-  //   }, 1000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
+    return () => clearInterval(interval);
+  }, [currentAccount]);
 
   const getAllTransactions = async () => {
     try {
@@ -279,6 +263,7 @@ export const TransactionProvider = ({ children }) => {
 
   const sendTransactionForFailedOrders = async (orderDetails) => {
     try {
+
       setProceedOrdersBtnTxt("Finalizing...");
       if (!ethereum) return alert("Please install metamask");
 
@@ -332,7 +317,7 @@ export const TransactionProvider = ({ children }) => {
       setIsLoading(false);
       throw new Error("No ethereum object.");
     }
-  };
+  }
 
   const sendTransactionForDispatchedOrders = async (orderDetails) => {
     try {
@@ -449,7 +434,7 @@ export const TransactionProvider = ({ children }) => {
    */
   useEffect(() => {
     checkIfWalletIsConnected();
-    // checkIfTransactionsExists();
+    checkIfTransactionsExists();
   }, []);
 
   return (
@@ -477,7 +462,7 @@ export const TransactionProvider = ({ children }) => {
         updateDeliveryStatusOfOrder,
         sendTransactionForFailedOrders,
         proceedOrdersBtnTxt,
-        setProceedOrdersBtnTxt,
+        setProceedOrdersBtnTxt
       }}
     >
       {children}

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: TSIN
-pragma solidity >=0.4.21 <0.9.0;
+pragma solidity ^0.8.0;
 
 import "./SupplyChain.sol";
 
@@ -9,7 +9,7 @@ contract SupplyChainStep7 is SupplyChain {
         uint256 _uid,
         string memory deliveryHubLongitude,
         string memory deliveryHubLatitude
-    ) public shippedByThirdParty(_uid) {
+    ) public  override shippedByThirdParty(_uid) {
         require(hasDeliveryHubRole(msg.sender));
         products[_uid].owner = msg.sender;
         products[_uid].deliveryhub.deliveryHub = msg.sender;

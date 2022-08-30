@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: TSIN
-pragma solidity >=0.4.21 <0.9.0;
+pragma solidity ^0.8.0;
 
 import "./SupplyChain.sol";
 
 contract SupplyChainStep6 is SupplyChain {
-    ///@dev STEP 7 : Shipping of product by third party purchased by customer.
+    // /@dev STEP 7 : Shipping of product by third party purchased by customer.
     function shipByThirdParty(uint256 _uid)
-        public
+        public override
         verifyAddress(products[_uid].owner)
         verifyAddress(products[_uid].thirdparty.thirdParty)
     {

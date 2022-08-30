@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: TSIN
-pragma solidity >=0.4.21 <0.9.0;
+pragma solidity ^0.8.0;
 
 import "./SupplyChain.sol";
 
 contract SupplyChainStep3 is SupplyChain {
-    ///@dev STEP 3 : Shipping of purchased product to Third Party.
+    // @dev STEP 3 : Shipping of purchased product to Third Party.
     function shipToThirdParty(uint256 _uid)
-        public
+        public override
         verifyAddress(products[_uid].manufacturer.manufacturer)
     {
         require(hasManufacturerRole(msg.sender));
